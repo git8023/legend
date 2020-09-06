@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <package name="org.y.core.model.entity"/>
+    </typeAliases>
+
+    <typeHandlers>
+<!--        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+<!--                     javaType="org.y.core.model.enu.ModuleStatus"/>-->
+<!--        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+<!--                     javaType="org.y.core.model.enu.ModuleType"/>-->
+    </typeHandlers>
+</configuration>

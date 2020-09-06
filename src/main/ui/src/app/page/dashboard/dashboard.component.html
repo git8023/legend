@@ -1,0 +1,17 @@
+<div class="mask"></div>
+
+<div class="box">
+
+  <div class="game-navs flex-h flex-center">
+    <div *ngFor="let nav of gameNavs"
+         (click)="activeGameNav(nav)"
+         [class.active]="nav == gameNav"
+         [routerLink]="nav.link"
+         class="game-nav active">{{nav.text}}</div>
+  </div>
+
+  <div class="game-body">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
