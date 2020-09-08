@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.js"></script>
+	
+	<style>
+		area:hover {
+			background: #f0f;
+		}
+		area {
+			border:1px solid #f00;
+		}
+		area:focus {
+			background:#f00;
+			border: 1px solid #f00;
+			outline: none;
+		}
+		.x {
+			color:#f00;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class='x'>
+	xxxx
+	</div>
+	
+<img src="file:///J:/repository/java/xFrame/legend/src/main/ui/src/assets/map.png" alt="" usemap="#Map">
+<map name="Map">
+  <area shape="poly"  id="jing_cheng" coords="588,366,574,372,563,378,551,387,544,395,537,391,526,391,526,392,521,404,519,411,523,421,526,432,529,440,536,444,545,445,548,454,550,463,546,469,544,481,542,493,535,500,525,504,525,516,526,526,538,523,545,527,554,525,563,523,572,521,576,518,573,509,579,503,592,502,611,498,624,497,635,494,645,491,650,493,658,501,650,515,653,522,659,526,664,522,671,530,679,513,692,506,697,494,688,483,679,481,668,482,660,483,651,478,643,472,634,473,631,465,640,459,642,450,640,442,642,432,649,428,645,419,653,417,656,408,647,401,633,398,622,392,612,392,609,377,607,370,598,366" href="javascript:void(0)" target="_self" alt="xxx">
+</map>
+	
+	<script>
+		$(function(){
+			$('#jing_cheng').click(function(){
+				console.log(111);
+			})
+		});
+	</script>
+</body>
+</html>
