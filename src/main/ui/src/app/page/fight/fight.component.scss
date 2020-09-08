@@ -1,0 +1,106 @@
+.main {
+
+  .mask {
+    background: rgba(0, 0, 0, .3);
+  }
+
+  .enemies, .players {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 1px solid #fff;
+    margin: 1rem;
+    font-size: 14px;
+  }
+
+  .enemies {
+    left: auto;
+    right: 0;
+    text-align: right;
+  }
+
+  .player {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .head_pic {
+      width: 40px;
+    }
+
+    .right-box {
+      width: 120px;
+      padding-left: .5rem;
+
+      > * {
+        color: #fff;
+      }
+
+      .points {
+        padding: 0;
+        margin: 3px;
+        height: 8px;
+        border: 1px solid #fff;
+
+        &.health {
+          background: #bf3535;
+        }
+
+        &.magic {
+          background: #549ad9;
+        }
+      }
+    }
+
+    .buf {
+      img {
+        width: 1rem;
+        margin-right: 3px;
+      }
+    }
+  }
+
+  .chart {
+    bottom: 1rem;
+    left: 1rem;
+    border: 1px solid #fff;
+    width: 300px;
+    height: 200px;
+
+    > * {
+      border: 1px solid #fff;
+    }
+  }
+
+  .props-box {
+    border: 1px solid #aaa;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .box {
+      width: 3rem;
+      height: 3rem;
+      background-position: center;
+      background-size: cover;
+      background-image: url("/assets/fight/skill/unknow.png");
+    }
+  }
+
+  .fight_info_box {
+    border: 1px solid #aaa;
+    bottom: 1rem;
+    right: 1rem;
+    width: 300px;
+    height: 200px;
+  }
+
+  .round_info {
+    border: 1px solid #aaa;
+    top:0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

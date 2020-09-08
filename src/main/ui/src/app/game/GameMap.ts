@@ -1,0 +1,126 @@
+export class GameMap {
+  // ID
+  id: number;
+
+  // 名称
+  name: string;
+
+  // 中文名称
+  cnName: string;
+
+  // (文字)中心点
+  pointCenter: { x: number, y: number };
+
+  // 等级范围
+  levelRange: { min: number, max: number };
+}
+
+const GameMaps = {
+  JING_CHENG: <GameMap>{
+    id: 0,
+    name: 'JING_CHENG',
+    cnName: '京城',
+    pointCenter: {x: 575, y: 415},
+    levelRange: {min: 0, max: 100}
+  },
+  CHEN_XI_CAO_YUAN: <GameMap>{
+    id: 0,
+    name: 'CHEN_XI_CAO_YUAN',
+    cnName: '晨曦草原',
+    pointCenter: {x: 596, y: 568},
+    levelRange: {min: 25, max: 35}
+  },
+  NAN_JIANG: <GameMap>{
+    id: 0,
+    name: 'NAN_JIANG',
+    cnName: '南疆',
+    pointCenter: {x: 745, y: 580},
+    levelRange: {min: 30, max: 45}
+  },
+  MING_SHA_HUANG_MO: <GameMap>{
+    id: 0,
+    name: 'MING_SHA_HUANG_MO',
+    cnName: '鸣沙荒漠',
+    pointCenter: {x: 880, y: 560},
+    levelRange: {min: 45, max: 60}
+  },
+  BING_DAO: <GameMap>{
+    id: 0,
+    name: 'BING_DAO',
+    cnName: '冰岛',
+    pointCenter: {x: 870, y: 320},
+    levelRange: {min: 20, max: 50}
+  },
+  HUO_DAP: <GameMap>{
+    id: 0,
+    name: 'HUO_DAP',
+    cnName: '火岛',
+    pointCenter: {x: 663, y: 200},
+    levelRange: {min: 30, max: 70}
+  },
+  LAO_YIN_TA: <GameMap>{
+    id: 0,
+    name: 'LAO_YIN_TA',
+    cnName: '烙印塔',
+    pointCenter: {x: 505, y: 270},
+    levelRange: {min: 30, max: 50}
+  },
+  BA_LI_ZHUANG: <GameMap>{
+    id: 0,
+    name: 'BA_LI_ZHUANG',
+    cnName: '八里庄',
+    pointCenter: {x: 372, y: 230},
+    levelRange: {min: 5, max: 15}
+  },
+  SHI_BA_LI_PU: <GameMap>{
+    id: 0,
+    name: 'SHI_BA_LI_PU',
+    cnName: '十八里铺',
+    pointCenter: {x: 440, y: 450},
+    levelRange: {min: 10, max: 20}
+  },
+  XING_ZI_LIN: <GameMap>{
+    id: 0,
+    name: 'XING_ZI_LIN',
+    cnName: '杏子林',
+    pointCenter: {x: 267, y: 360},
+    levelRange: {min: 0, max: 9}
+  },
+  QI_XIA_ZHEN: <GameMap>{
+    id: 0,
+    name: 'QI_XIA_ZHEN',
+    cnName: '七侠镇',
+    pointCenter: {x: 290, y: 550},
+    levelRange: {min: 15, max: 25}
+  },
+  WU_BA_GANG: <GameMap>{
+    id: 0,
+    name: 'WU_BA_GANG',
+    cnName: '五霸岗',
+    pointCenter: {x: 440, y: 590},
+    levelRange: {min: 20, max: 30}
+  },
+  DUAN_HAI_ZHI_YUAN: <GameMap>{
+    id: 0,
+    name: 'DUAN_HAI_ZHI_YUAN',
+    cnName: '断海之渊',
+    pointCenter: {x: 90, y: 180},
+    levelRange: {min: 70, max: 90}
+  },
+  JI_FENG_BI_AN: <GameMap>{
+    id: 0,
+    name: 'JI_FENG_BI_AN',
+    cnName: '疾风彼岸',
+    pointCenter: {x: 150, y: 50},
+    levelRange: {min: 90, max: 100}
+  },
+  MO_YI_SHAN_GU: <GameMap>{
+    id: 0,
+    name: 'MO_YI_SHAN_GU',
+    cnName: '魔裔山谷',
+    pointCenter: {x: 80, y: 620},
+    levelRange: {min: 50, max: 80}
+  },
+};
+
+export {GameMaps};

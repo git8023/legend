@@ -7,7 +7,7 @@ import {PackageComponent} from "./page/package/package.component";
 import {SkillsComponent} from "./page/skills/skills.component";
 import {MapComponent} from "./page/map/map.component";
 import {DungeonComponent} from "./page/dungeon/dungeon.component";
-
+import {FightComponent} from './page/fight/fight.component';
 
 const routes: Routes = [
   {
@@ -18,6 +18,7 @@ const routes: Routes = [
       {path: 'skills', component: SkillsComponent},
       {path: 'map', component: MapComponent},
       {path: 'dungeon', component: DungeonComponent},
+      {path: 'fight', component: FightComponent},
     ]
   },
   {path: '', redirectTo: '', pathMatch: 'full'}

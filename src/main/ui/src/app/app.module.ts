@@ -10,6 +10,7 @@ import { PackageComponent } from './page/package/package.component';
 import { SkillsComponent } from './page/skills/skills.component';
 import { MapComponent } from './page/map/map.component';
 import { DungeonComponent } from './page/dungeon/dungeon.component';
+import { FightComponent } from './page/fight/fight.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { DungeonComponent } from './page/dungeon/dungeon.component';
     PackageComponent,
     SkillsComponent,
     MapComponent,
-    DungeonComponent
+    DungeonComponent,
+    FightComponent
   ],
   imports: [
     BrowserModule,

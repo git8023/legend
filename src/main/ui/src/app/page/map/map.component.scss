@@ -1,0 +1,42 @@
+.max-box {
+
+  .map {
+    position: relative;
+
+    .map_local {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2rem;
+      z-index: 1;
+
+      > img {
+        width: 100%;
+        animation: map_local_pointer .5s linear infinite;
+        position: relative;
+      }
+    }
+
+    .map_level {
+      color: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 1rem;
+      text-shadow: 2px 2px 2px rgba(0, 0, 0, .3);
+    }
+  }
+
+}
+
+@keyframes map_local_pointer {
+  0% {
+    top: 0;
+  }
+  75% {
+    top: -1rem
+  }
+  100% {
+    top: 0;
+  }
+}
