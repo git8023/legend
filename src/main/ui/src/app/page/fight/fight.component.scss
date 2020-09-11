@@ -17,6 +17,11 @@
     left: auto;
     right: 0;
     text-align: right;
+
+    .points .value {
+      left: auto !important;
+      right: 0;
+    }
   }
 
   .player {
@@ -43,14 +48,31 @@
         margin: 3px;
         height: 8px;
         border: 1px solid #fff;
+        position: relative;
+
+        .value {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+        }
 
         &.health {
-          background: #bf3535;
+          background: #f3b9b9;
+
+          .value {
+            background: #e82f2f;
+          }
         }
 
         &.magic {
-          background: #549ad9;
+          background: #bedbf6;
+
+          .value {
+            background: #2395f3;
+          }
         }
+
       }
     }
 
@@ -95,12 +117,19 @@
     right: 1rem;
     width: 300px;
     height: 200px;
+    color: #aaa;
+    font-size: .85rem;
   }
 
   .round_info {
-    border: 1px solid #aaa;
-    top:0;
+    margin-top: 1rem;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
+
+    .round_times {
+      color: #e6bd29;
+      font-size: 2rem;
+    }
   }
 }

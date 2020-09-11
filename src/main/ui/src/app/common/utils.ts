@@ -83,6 +83,10 @@ export function apply(fn: Function, _this?: any, args?: []) {
     return fn.apply(_this, args);
 }
 
+export function rand(min: number, max: number): number {
+  return parseInt(Math.random() * (max - min + 1) + '') + min;
+}
+
 //</editor-fold>
 
 //<editor-fold desc="object">
