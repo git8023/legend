@@ -73,5 +73,35 @@ area {
   overflow: auto;
 }
 
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-clear {
+  clear: both;
+}
+
+.duration-delete {
+  //height: 0!important;
+  overflow: hidden;
+  opacity: 0;
+  transition: height 1s, opacity 1s;
+}
+
+@keyframes duration-delete {
+  0% {
+    height: auto;
+  }
+  100% {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+}
+
 //</editor-fold>
 

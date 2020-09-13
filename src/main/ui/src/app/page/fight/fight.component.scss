@@ -109,16 +109,61 @@
       background-size: cover;
       background-image: url("/assets/fight/skill/unknow.png");
     }
+
+    .attack, .defense {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 2rem;
+      overflow: hidden;
+      background: #90823e;
+
+      > img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .attack {
+      position: absolute;
+      left: -3.5rem;
+    }
+
+    .defense {
+      position: absolute;
+      top: 0;
+      right: -3.5rem;
+    }
   }
 
   .fight_info_box {
-    border: 1px solid #aaa;
+    //border: 1px solid #aaa;
     bottom: 1rem;
     right: 1rem;
     width: 300px;
-    height: 200px;
+    //height: 200px;
     color: #aaa;
-    font-size: .85rem;
+    font-size: 0.85rem;
+    //background: rgba(0,0,0,.3);
+
+    .player {
+      color: #095084;
+    }
+
+    .enemy {
+      color: #13580d;
+    }
+
+    .harm {
+      color: #cbb90c;
+    }
+
+    .skill_name {
+      color: #820f0f;
+    }
+
+    .normal_attack {
+      color: #666;
+    }
   }
 
   .round_info {

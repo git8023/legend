@@ -16,10 +16,10 @@
             <div class="flex-1 right-box">
               <div class="name">{{player.name}} <span class="lv">Lv.{{player.level}}</span></div>
               <div class="health points">
-                <div class="value" [ngStyle]="{width:player.hp/player.maxHp*100+'%'}"></div>
+                <div class="value" [ngStyle]="{width:player.currentHP/player.maxHP*100+'%'}"></div>
               </div>
               <div class="magic points">
-                <div class="value" [ngStyle]="{width:player.mp/player.maxMp*100+'%'}"></div>
+                <div class="value" [ngStyle]="{width:player.currentMP/player.maxMP*100+'%'}"></div>
               </div>
             </div>
           </div>
@@ -33,18 +33,18 @@
 
       <!--敌对方-->
       <div class="enemies absolute">
-        <div class="player" (click)="attackEnemy()">
+        <div class="player">
           <div class="flex-h flex-center">
             <div class="flex-1 right-box">
-              <div class="name">{{master.name}} <span class="lv">Lv.{{master.level}}</span></div>
+              <div class="name">{{enemy.name}} <span class="lv">Lv.{{enemy.level}}</span></div>
               <div class="health points">
-                <div class="value" [ngStyle]="{width:master.hp/master.maxHp*100+'%'}"></div>
+                <div class="value" [ngStyle]="{width:enemy.currentHP/enemy.maxHP*100+'%'}"></div>
               </div>
               <div class="magic points">
-                <div class="value" [ngStyle]="{width:master.mp/master.maxMp*100+'%'}"></div>
+                <div class="value" [ngStyle]="{width:enemy.currentMP/enemy.maxMP*100+'%'}"></div>
               </div>
             </div>
-            <img [src]="master.pic" alt="" class="head_pic">
+            <img [src]="enemy.pic" alt="" class="head_pic">
           </div>
           <div class="buf">
             <img src="/assets/fight/stateIco/up_attack.jpg" alt="">
@@ -70,13 +70,21 @@
 
       <!--技能&药品-->
       <div class="props-box absolute">
-        <div class="skill-list flex-h">
-          <div class="skill box flex-1"></div>
-          <div class="skill box flex-1"></div>
-          <div class="skill box flex-1"></div>
-          <div class="skill box flex-1"></div>
-          <div class="skill box flex-1"></div>
-          <div class="skill box flex-1"></div>
+        <div>
+          <div class="attack" (click)="normalAttack()">
+            <img src="/assets/fight/skill/attack.png" alt="">
+          </div>
+          <div class="skill-list flex-h">
+            <div class="skill box flex-1"></div>
+            <div class="skill box flex-1"></div>
+            <div class="skill box flex-1"></div>
+            <div class="skill box flex-1"></div>
+            <div class="skill box flex-1"></div>
+            <div class="skill box flex-1"></div>
+          </div>
+          <div class="defense">
+            <img src="/assets/fight/skill/defense.png" alt="">
+          </div>
         </div>
         <div class="prop-list flex-h">
           <div class="prop box flex-1"></div>
@@ -90,7 +98,19 @@
 
       <!--战斗信息-->
       <div class="fight_info_box absolute overflow-auto" #fightInfoRef>
-        <div *ngFor="let msg of attackMessages">{{msg}}</div>
+        <div *ngFor="let msg of fightScene.messageQueue.queue"
+             [durationDelete]="{data:msg}" [onDeleted]="onMessageDelete">
+          <span *ngIf="1 == msg.type">
+            <span class="{{msg.data.fromRole.isPlayer?'player':'enemy'}}">{{msg.data.fromRole.name}}</span>
+            (<span class="{{msg.data.skill?'skill_name':'normal_attack'}}">{{msg.data.skill || '普通攻击'}}</span>)
+            对
+            <span class="{{msg.data.toRole.isPlayer?'player':'enemy'}}">{{msg.data.toRole.name}}</span>
+            造成
+            <span class="harm">{{msg.data.harm}}</span>
+            点伤害.
+          </span>
+          <span *ngIf="msg.data.extra">{{msg.data.extra}}</span>
+        </div>
       </div>
 
     </div>

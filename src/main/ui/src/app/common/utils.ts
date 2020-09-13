@@ -78,13 +78,35 @@ export function copyProps(src: object, dest: object, each?: (k, sv, dv) => boole
   return dest;
 }
 
+/**
+ * 反射执行函数
+ * @param fn 目标函数
+ * @param _this 上下文环境
+ * @param args 参数列表
+ */
 export function apply(fn: Function, _this?: any, args?: []) {
   if (isFunction(fn))
     return fn.apply(_this, args);
 }
 
+/**
+ * 范围内随机数
+ * @param min 最小值
+ * @param max 最大值
+ */
 export function rand(min: number, max: number): number {
   return parseInt(Math.random() * (max - min + 1) + '') + min;
+}
+
+function G() {
+  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
+}
+
+/**
+ * 生成GUID码
+ */
+export function guid(): string {
+  return (G() + G() + "-" + G() + "-" + G() + "-" + G() + "-" + G() + G() + G()).toUpperCase();
 }
 
 //</editor-fold>
@@ -1041,15 +1063,45 @@ export class Debugger {
   }
 }
 
-function G() {
-  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-}
-
 /**
- * 生成GUID码
+ * 定长消息队列
+ * @param T 泛型参数
  */
-export function guid(): string {
-  return (G() + G() + "-" + G() + "-" + G() + "-" + G() + "-" + G() + G() + G()).toUpperCase();
+export class MessageQueue<T> {
+
+  // 队列
+  queue: Array<T> = [];
+
+  constructor(private cacheLength: number = 100) {
+  }
+
+  /**
+   * 数据推入队列, 队列长度超出{@link cacheLength 缓冲区长度}时返回溢出数据
+   * @param data 目标数据
+   */
+  pull(data: T): T {
+    this.queue.push(data);
+    if (this.cacheLength == this.queue.length) {
+      return this.get();
+    }
+  }
+
+  /**
+   * 弹出队首数据
+   */
+  get(): T {
+    if (0 < this.queue.length)
+      return this.queue.shift();
+  }
+
+  /**
+   * 删除指定消息
+   * @param msg 消息对象
+   * @param {string | ((el: T, i: number) => boolean)} [k] 唯一值属性名或比较器函数(返回true表示找到)
+   */
+  del(msg: any, k?: string | ((el: T, i: number) => boolean)) {
+    removeA(this.queue, msg, k);
+  }
 }
 
 //</editor-fold>

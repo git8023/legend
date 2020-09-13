@@ -2,6 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameMap, GameMaps} from '../../game/GameMap';
 import {rand} from '../../common/utils';
+import {FightScene, GameRole} from "../../game/FightScene";
+import {DelayConfigure} from "../../directive/duration-delete.directive";
 
 @Component({
   selector: 'app-fight',
@@ -13,36 +15,47 @@ export class FightComponent implements OnInit {
   @ViewChild('fightInfoRef', {static: true}) fightInfoRef: ElementRef;
 
   gameMap: GameMap;
-  player = {
+  player: GameRole = {
     name: '七月',
     pic: '/assets/fight/headPic/player-1.png',
     level: 30,
-    maxHp: 450,
-    maxMp: 200,
+    maxHP: 450,
+    maxMP: 200,
+    speed: 5,
+    isPlayer: true,
 
-    hp: 300,
-    mp: 160,
+    currentHP: 300,
+    currentMP: 160,
     attackMin: 1,
     attackMax: 10,
     defenseMin: 2,
     defenseMax: 7,
   };
-  master = {
+  enemy: GameRole = {
     name: '毒蜘蛛',
     pic: '/assets/fight/master/du_zhi_zhu.png',
     level: 12,
-    maxHp: 200,
-    maxMp: 60,
+    maxHP: 200,
+    maxMP: 60,
+    speed: 3,
+    isPlayer: false,
 
-    hp: 180,
-    mp: 10,
+    currentHP: 180,
+    currentMP: 10,
     attackMin: 1,
     attackMax: 5,
     defenseMin: 0,
     defenseMax: 3,
   };
 
-  attackMessages: string[] = [];
+  // 战斗场景
+  fightScene: FightScene;
+
+  // 战斗消息执行删除动画后
+  onMessageDelete = (data) => {
+    console.log("消息被删除", data);
+    this.fightScene.deleteMessage(data);
+  };
 
   constructor(private route: ActivatedRoute) {
   }
@@ -50,17 +63,17 @@ export class FightComponent implements OnInit {
   ngOnInit() {
     let mapKey = this.route.snapshot.params.mapKey;
     this.gameMap = GameMaps[mapKey] || GameMaps.XING_ZI_LIN;
+
+    // 创建游戏场景
+    this.fightScene = FightScene.create();
+    this.fightScene.player = this.player;
+    this.fightScene.enemy = this.enemy;
+    this.fightScene.readyFight();
   }
 
-  // 攻击敌人
-  attackEnemy() {
-    // 玩家攻击
-    let playerAttack = rand(this.player.attackMin, this.player.attackMax);
-    let masterDefense = rand(this.master.defenseMin, this.master.defenseMax);
-    let harm = Math.max(playerAttack - masterDefense, 1);
-    this.master.hp = Math.max(this.master.hp - harm, 0);
-
-    this.attackMessages.push(`${this.player.name}(普通攻击) 对 ${this.player.name} 造成 ${harm} 点伤害`);
+  // 准备攻击(敌人/队友)
+  normalAttack() {
+    this.fightScene.normalAttack();
   }
 
 }
