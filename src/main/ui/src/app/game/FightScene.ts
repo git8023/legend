@@ -64,8 +64,12 @@ export class FightScene {
       this.doNormalAttack(this.player, this.enemy)
       // 敌人攻击
       setTimeout(() => this.doNormalAttack(this.enemy, this.player), 500);
+    } else {
+      // 玩家普通攻击
+      setTimeout(() => this.doNormalAttack(this.player, this.enemy), 500);
+      // 敌人攻击
+      this.doNormalAttack(this.enemy, this.player);
     }
-
   }
 
   // 玩家执行普通攻击
