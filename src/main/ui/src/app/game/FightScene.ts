@@ -212,7 +212,7 @@ export class FightScene {
     this.messageQueue.pull(Messages.text('正在结算...'));
 
     // 经验 = 怪物等级 / 玩家等级 + 怪物血量/10 + 玩家等级
-    let exp = this.enemy.level / this.player.level + this.enemy.maxHP / 10 + this.player.level;
+    let exp = Math.ceil(this.enemy.level / this.player.level + this.enemy.maxHP / 10 + (this.enemy.level - this.player.level));
     this.player.appendExp(exp);
     this.messageQueue.pull(Messages.liquidation(`经验+${exp}`));
 

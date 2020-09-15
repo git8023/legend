@@ -96,53 +96,83 @@
     }
   }
 
-  .props-box {
-    border: 1px solid #aaa;
-    bottom: 1rem;
+  .props-container {
     left: 50%;
     transform: translateX(-50%);
+    bottom: 0;
 
-    .box {
-      width: 3rem;
-      height: 3rem;
-      background-position: center;
-      background-size: cover;
-      background-image: url("/assets/fight/skill/unknow.png");
-      position: relative;
+    .props-box {
+      border: 1px solid #aaa;
 
-      .skill_wait {
-        background: #000;
+      .box {
+        width: 3rem;
+        height: 3rem;
+        background-position: center;
+        background-size: cover;
+        background-image: url("/assets/fight/skill/unknow.png");
+        position: relative;
+
+        .skill_wait {
+          background: #000;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0.2;
+        }
+      }
+
+      .attack, .defense {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 2rem;
+        overflow: hidden;
+        background: #90823e;
+
+        > img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .attack {
         position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.2;
+        left: -3.5rem;
+      }
+
+      .defense {
+        position: absolute;
+        top: 0;
+        right: -3.5rem;
       }
     }
 
-    .attack, .defense {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 2rem;
-      overflow: hidden;
-      background: #90823e;
+    .level-exp-container {
+      margin: 0 -3rem;
+      color: #fff;
+      height: .5rem;
+      font-size: .5rem;
 
-      > img {
-        width: 100%;
-        height: 100%;
+      .exp-title {
+        margin-top: -.5rem;
+        padding: 0 .5rem 0 0;
       }
-    }
 
-    .attack {
-      position: absolute;
-      left: -3.5rem;
-    }
+      .exp-box {
+        background: #21581a;
+        position: relative;
 
-    .defense {
-      position: absolute;
-      top: 0;
-      right: -3.5rem;
+        .exp-percent {
+          position: absolute;
+          top: 25%;
+          left: 0;
+          height: 50%;
+          width: 10%;
+          background: #10ad05;
+          transition: width .3s;
+        }
+      }
     }
   }
 

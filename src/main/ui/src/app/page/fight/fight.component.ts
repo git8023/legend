@@ -14,15 +14,15 @@ export class FightComponent implements OnInit {
   @ViewChild('fightInfoRef', {static: true}) fightInfoRef: ElementRef;
 
   gameMap: GameMap;
-  player: Player = Player.of({
+  player: Player = Player.create({
     name: '七月',
     pic: '/assets/fight/headPic/player-1.png',
     level: 1,
     maxHP: 20,
     maxMP: 15,
     speed: 5,
-    attackMin: 1,
-    attackMax: 5,
+    attackMin: 10,
+    attackMax: 15,
     defenseMin: 1,
     defenseMax: 2,
   });
@@ -47,6 +47,9 @@ export class FightComponent implements OnInit {
 
     // 创建游戏场景
     this.fightScene = new FightScene(this.gameMap, this.player);
+
+    console.log(this.player.exp.currentExp / this.player.exp.levelUpExp * 100 + '%');
+
     this.fightScene.fightEvent({
       // onStart: () => this.isPause = false,
       // onRoundStart: () => this.isPause = false,

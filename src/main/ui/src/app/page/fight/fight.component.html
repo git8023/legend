@@ -69,56 +69,64 @@
       </div>
 
       <!--技能&药品-->
-      <div class="props-box absolute">
-        <div>
-          <div class="attack box" (click)="normalAttack()">
-            <img src="/assets/fight/skill/attack.png" alt="">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
+      <div class="props-container absolute">
+        <div class="props-box">
+          <div>
+            <div class="attack box" (click)="normalAttack()">
+              <img src="/assets/fight/skill/attack.png" alt="">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
+            <div class="skill-list flex-h">
+              <div class="skill box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="skill box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="skill box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="skill box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="skill box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="skill box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+            </div>
+            <div class="defense box">
+              <img src="/assets/fight/skill/defense.png" alt="">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
           </div>
-          <div class="skill-list flex-h">
-            <div class="skill box flex-1">
+          <div class="prop-list flex-h">
+            <div class="prop box flex-1">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
-            <div class="skill box flex-1">
+            <div class="prop box flex-1">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
-            <div class="skill box flex-1">
+            <div class="prop box flex-1">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
-            <div class="skill box flex-1">
+            <div class="prop box flex-1">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
-            <div class="skill box flex-1">
+            <div class="prop box flex-1">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
-            <div class="skill box flex-1">
+            <div class="prop box flex-1">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
-          </div>
-          <div class="defense box">
-            <img src="/assets/fight/skill/defense.png" alt="">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
           </div>
         </div>
-        <div class="prop-list flex-h">
-          <div class="prop box flex-1">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
-          </div>
-          <div class="prop box flex-1">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
-          </div>
-          <div class="prop box flex-1">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
-          </div>
-          <div class="prop box flex-1">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
-          </div>
-          <div class="prop box flex-1">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
-          </div>
-          <div class="prop box flex-1">
-            <div class="skill_wait" [skill-wait]="isPause"></div>
-          </div>
+        <div class="flex-h level-exp-container">
+          <span class="exp-title">Exp</span>
+          <span class="flex-1 exp-box">
+            <span class="exp-percent" [ngStyle]="{'width':player.exp.currentExp/player.exp.levelUpExp*100+'%'}"></span>
+          </span>
         </div>
       </div>
 
