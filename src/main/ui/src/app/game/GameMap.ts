@@ -1,4 +1,7 @@
-export class GameMap {
+import {MasterRole} from './role/MasterRole';
+import {rand, randA} from '../common/utils';
+
+export interface GameMap {
   // ID
   id: number;
 
@@ -13,7 +16,41 @@ export class GameMap {
 
   // 等级范围
   levelRange: { min: number, max: number };
+
+  // 是否能遇到敌人
+  isSafeArea?: boolean;
+
+  // 敌人列表
+  enemies?: MasterRole[];
+
+  // 生成敌人
+  generateEnemy?: () => MasterRole;
 }
+
+let xingZiLin: GameMap = {
+  id: 0,
+  name: 'XING_ZI_LIN',
+  cnName: '杏子林',
+  pointCenter: {x: 267, y: 360},
+  levelRange: {min: 0, max: 9},
+  enemies: [
+    MasterRole.of({
+      name: '毒蜘蛛',
+      pic: '/assets/fight/master/du_zhi_zhu.png',
+      level: 1,
+      maxHP: 10,
+      maxMP: 5,
+      speed: 1,
+      attackMin: 1,
+      attackMax: 5,
+      defenseMin: 1,
+      defenseMax: 2,
+    })
+  ],
+  generateEnemy: function () {
+    return randA<MasterRole>(this.enemies);
+  }
+};
 
 const GameMaps = {
   JING_CHENG: <GameMap>{
@@ -21,7 +58,8 @@ const GameMaps = {
     name: 'JING_CHENG',
     cnName: '京城',
     pointCenter: {x: 575, y: 415},
-    levelRange: {min: 0, max: 100}
+    levelRange: {min: 0, max: 100},
+    isSafeArea: true
   },
   CHEN_XI_CAO_YUAN: <GameMap>{
     id: 0,
@@ -79,13 +117,7 @@ const GameMaps = {
     pointCenter: {x: 440, y: 450},
     levelRange: {min: 10, max: 20}
   },
-  XING_ZI_LIN: <GameMap>{
-    id: 0,
-    name: 'XING_ZI_LIN',
-    cnName: '杏子林',
-    pointCenter: {x: 267, y: 360},
-    levelRange: {min: 0, max: 9}
-  },
+  XING_ZI_LIN: xingZiLin,
   QI_XIA_ZHEN: <GameMap>{
     id: 0,
     name: 'QI_XIA_ZHEN',

@@ -1,5 +1,5 @@
 // 消息类型
-import {GameRole} from "./FightScene";
+import {GameRole} from './role/GameRole';
 
 export enum MessageType {
   // 普通文本消息
@@ -7,6 +7,9 @@ export enum MessageType {
 
   // 战斗消息
   FIGHT,
+
+  // 结算
+  LIQUIDATION
 }
 
 // 战斗数据消息
@@ -20,7 +23,7 @@ export interface FightMessageData {
   // 技能名称, 普通攻击留空
   skill?: string;
   // 额外消息
-  extra?: string;
+  extra?: any;
 }
 
 // 游戏消息接口
@@ -39,6 +42,31 @@ export class Messages {
    * @param role 游戏角色
    */
   static dead(role: GameRole): Message {
-    return {type: MessageType.TEXT, data: {extra: `${role.name}已死亡!!!`}};
+    return this.text(`${role.name}已死亡!!!`);
+  }
+
+  /**
+   * 战斗失败
+   * @param role 游戏角色
+   */
+  static lose(role: GameRole): Message {
+    return this.text(`战斗失败, ${role.name}活力恢复中...`);
+  }
+
+  /**
+   * 文本消息
+   * @param extra 消息描述
+   */
+  static text(extra: string): Message {
+    return {type: MessageType.TEXT, data: {extra: extra}};
+  }
+
+  /**
+   * 结算消息
+   * @param extra 消息描述
+   */
+  static liquidation(extra: string): Message {
+    return {type: MessageType.LIQUIDATION, data: {extra: extra}};
   }
 }
+

@@ -12,6 +12,7 @@ import { MapComponent } from './page/map/map.component';
 import { DungeonComponent } from './page/dungeon/dungeon.component';
 import { FightComponent } from './page/fight/fight.component';
 import { DurationDeleteDirective } from './directive/duration-delete.directive';
+import { SkillWaitDirective } from './directive/skill-wait.directive';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { DurationDeleteDirective } from './directive/duration-delete.directive';
     MapComponent,
     DungeonComponent,
     FightComponent,
-    DurationDeleteDirective
+    DurationDeleteDirective,
+    SkillWaitDirective
   ],
   imports: [
     BrowserModule,

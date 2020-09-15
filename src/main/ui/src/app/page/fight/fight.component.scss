@@ -108,6 +108,17 @@
       background-position: center;
       background-size: cover;
       background-image: url("/assets/fight/skill/unknow.png");
+      position: relative;
+
+      .skill_wait {
+        background: #000;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.2;
+      }
     }
 
     .attack, .defense {

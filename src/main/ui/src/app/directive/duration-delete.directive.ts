@@ -1,9 +1,9 @@
-import {Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[durationDelete]'
 })
-export class DurationDeleteDirective implements OnInit, OnDestroy {
+export class DurationDeleteDirective implements OnInit {
 
   // 缓存数量
   static currentCache = 0;
@@ -35,7 +35,6 @@ export class DurationDeleteDirective implements OnInit, OnDestroy {
     private el: ElementRef,
     private render: Renderer2
   ) {
-    console.log("指令创建成功");
   }
 
   ngOnInit(): void {
@@ -62,12 +61,6 @@ export class DurationDeleteDirective implements OnInit, OnDestroy {
 
       }, this.configure.displayDuration || this.DEFAULT_CONFIG.displayDuration);
     });
-  }
-
-  ngOnDestroy(): void {
-    console.log("指令对象被销毁");
-    // if (isFunction(this.onDeleted))
-    //   this.onDeleted(this.configure.data);
   }
 
 }

@@ -33,7 +33,7 @@
 
       <!--敌对方-->
       <div class="enemies absolute">
-        <div class="player">
+        <div class="player" *ngIf="enemy">
           <div class="flex-h flex-center">
             <div class="flex-1 right-box">
               <div class="name">{{enemy.name}} <span class="lv">Lv.{{enemy.level}}</span></div>
@@ -55,7 +55,7 @@
 
       <!--回合信息-->
       <div class="round_info absolute">
-        <div class="round_times">第 1 回合</div>
+        <div class="round_times">第 {{fightScene.roundCounter}} 回合</div>
       </div>
 
       <!--聊天频道-->
@@ -71,28 +71,54 @@
       <!--技能&药品-->
       <div class="props-box absolute">
         <div>
-          <div class="attack" (click)="normalAttack()">
+          <div class="attack box" (click)="normalAttack()">
             <img src="/assets/fight/skill/attack.png" alt="">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
           </div>
           <div class="skill-list flex-h">
-            <div class="skill box flex-1"></div>
-            <div class="skill box flex-1"></div>
-            <div class="skill box flex-1"></div>
-            <div class="skill box flex-1"></div>
-            <div class="skill box flex-1"></div>
-            <div class="skill box flex-1"></div>
+            <div class="skill box flex-1">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
+            <div class="skill box flex-1">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
+            <div class="skill box flex-1">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
+            <div class="skill box flex-1">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
+            <div class="skill box flex-1">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
+            <div class="skill box flex-1">
+              <div class="skill_wait" [skill-wait]="isPause"></div>
+            </div>
           </div>
-          <div class="defense">
+          <div class="defense box">
             <img src="/assets/fight/skill/defense.png" alt="">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
           </div>
         </div>
         <div class="prop-list flex-h">
-          <div class="prop box flex-1"></div>
-          <div class="prop box flex-1"></div>
-          <div class="prop box flex-1"></div>
-          <div class="prop box flex-1"></div>
-          <div class="prop box flex-1"></div>
-          <div class="prop box flex-1"></div>
+          <div class="prop box flex-1">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
+          </div>
+          <div class="prop box flex-1">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
+          </div>
+          <div class="prop box flex-1">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
+          </div>
+          <div class="prop box flex-1">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
+          </div>
+          <div class="prop box flex-1">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
+          </div>
+          <div class="prop box flex-1">
+            <div class="skill_wait" [skill-wait]="isPause"></div>
+          </div>
         </div>
       </div>
 

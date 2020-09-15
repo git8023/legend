@@ -79,12 +79,12 @@ export function copyProps(src: object, dest: object, each?: (k, sv, dv) => boole
 }
 
 /**
- * 反射执行函数
+ * 执行函数
  * @param fn 目标函数
  * @param _this 上下文环境
  * @param args 参数列表
  */
-export function apply(fn: Function, _this?: any, args?: []) {
+export function execMethod(fn: Function, _this?: any, args?: any[]) {
   if (isFunction(fn))
     return fn.apply(_this, args);
 }
@@ -95,7 +95,7 @@ export function apply(fn: Function, _this?: any, args?: []) {
  * @param max 最大值
  */
 export function rand(min: number, max: number): number {
-  return parseInt(Math.random() * (max - min + 1) + '') + min;
+  return parseInt(Math.random() * (max - min) + '') + min;
 }
 
 function G() {
@@ -334,6 +334,14 @@ export function extendPropsA<T, P>(a: Array<T>, k: string): Array<P> {
   let pa = [];
   eachA(a, e => pa.push(e[k]));
   return pa;
+}
+
+/**
+ * 随机获取数组中元素
+ * @param a 数组
+ */
+export function randA<T>(a: Array<T>): T {
+  return a[rand(0, a.length)];
 }
 
 //</editor-fold>
@@ -1101,6 +1109,13 @@ export class MessageQueue<T> {
    */
   del(msg: any, k?: string | ((el: T, i: number) => boolean)) {
     removeA(this.queue, msg, k);
+  }
+
+  /**
+   * 清空消息队列
+   */
+  clear() {
+    this.queue.length = 0;
   }
 }
 
