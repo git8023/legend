@@ -8,7 +8,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    border: 1px solid #fff;
+    //border: 1px solid #fff;
     margin: 1rem;
     font-size: 14px;
   }
@@ -26,13 +26,19 @@
 
   .player {
     margin-bottom: 1rem;
+    background: rgb(149, 129, 18, .3);
+
+    > * {
+      padding: 5px;
+    }
 
     &:last-child {
       margin-bottom: 0;
     }
 
     .head_pic {
-      width: 40px;
+      width: 3rem;
+      height: 3rem;
     }
 
     .right-box {
@@ -55,6 +61,7 @@
           top: 0;
           left: 0;
           height: 100%;
+          transition: width .3s;
         }
 
         &.health {
@@ -123,12 +130,13 @@
         }
       }
 
-      .attack, .defense {
-        width: 3rem;
-        height: 3rem;
+      .attack, .defense, .escape {
+        width: 2rem;
+        height: 2rem;
         border-radius: 2rem;
         overflow: hidden;
         background: #90823e;
+        position: absolute;
 
         > img {
           width: 100%;
@@ -137,14 +145,17 @@
       }
 
       .attack {
-        position: absolute;
-        left: -3.5rem;
+        left: -2.5rem;
       }
 
       .defense {
-        position: absolute;
         top: 0;
-        right: -3.5rem;
+        right: -2.5rem;
+      }
+
+      .escape {
+        top: 3rem;
+        right: -2.5rem;
       }
     }
 
@@ -188,6 +199,7 @@
 
     .player {
       color: #095084;
+      background: transparent !important;
     }
 
     .enemy {

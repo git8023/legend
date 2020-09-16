@@ -1,4 +1,5 @@
 import {GameRole} from './GameRole';
+import {eachA} from '../../common/utils';
 
 // 等级经验
 class LevelExp {
@@ -102,3 +103,43 @@ export class Player extends GameRole {
     this.currentMP = this.maxMP;
   }
 }
+
+// 玩家管理
+// 组队/帮派等
+export class Players {
+  private readonly current: Player;
+
+  constructor() {
+    this.current = Player.create({
+      name: '七月',
+      pic: '/assets/fight/headPic/player-1.png',
+      level: 1,
+      maxHP: 20,
+      maxMP: 15,
+      speed: 5,
+      attackMin: 1,
+      attackMax: 15,
+      defenseMin: 1,
+      defenseMax: 3,
+    });
+  }
+
+  // 获取当前用户
+  getCurrent(): Player {
+    return this.current;
+  }
+
+  // 经验 = 怪物等级 / 玩家等级 + 怪物血量/10 + 玩家等级
+  addExp(enemies: GameRole[]): number {
+    let totalExp = 0;
+    eachA(enemies, enemy => {
+      let exp = Math.ceil(enemy.level / this.current.level + enemy.maxHP / 10 + (enemy.level - this.current.level));
+      totalExp += Math.max(1, exp);
+    });
+    this.current.appendExp(totalExp);
+    return totalExp;
+  }
+}
+
+const players = new Players();
+export {players};

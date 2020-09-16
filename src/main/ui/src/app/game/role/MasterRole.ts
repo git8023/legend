@@ -2,6 +2,7 @@ import {GameRole} from './GameRole';
 
 // 游戏敌人
 export class MasterRole extends GameRole {
+  isBoss?: boolean;
 
   static of(role: GameRole): MasterRole {
     return new MasterRole(
@@ -18,4 +19,9 @@ export class MasterRole extends GameRole {
     );
   }
 
+  static ofBoss(role: GameRole) {
+    let master = this.of(role);
+    master.isBoss = true;
+    return master;
+  }
 }

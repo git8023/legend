@@ -2,7 +2,7 @@ import {execMethod, MessageQueue, rand} from "../common/utils";
 import {Message, Messages, MessageType} from "./Message";
 import {GameRole} from './role/GameRole';
 import {GameMap} from './GameMap';
-import {Player} from './role/Player';
+import {Player, players} from './role/Player';
 
 // 战斗状态
 export enum FightStatus {
@@ -39,6 +39,8 @@ export class FightScene {
 
   // 战斗状态
   status: FightStatus = FightStatus.READY_FIGHT;
+  // 当前玩家
+  player: Player;
   // 敌人
   enemy: GameRole;
   // 场景消息队列
@@ -50,7 +52,9 @@ export class FightScene {
   // 回合计数器
   roundCounter: number = 1;
 
-  constructor(private gameMap: GameMap, private player: Player) {
+  constructor(private gameMap: GameMap) {
+    this.player = players.getCurrent();
+
     this.player.currentHP = this.player.maxHP;
     this.player.currentMP = this.player.maxMP;
   }
@@ -86,18 +90,17 @@ export class FightScene {
     this.doNormalAttack(this.enemy, this.player);
   }
 
-  // 玩家执行普通攻击
+  // 执行普通攻击
   private doNormalAttack(fromRole: GameRole, toRole: GameRole) {
-    if ((0 == fromRole.currentHP) || (0 == toRole.currentHP)) {
+    if ((0 == fromRole.currentHP) || (0 == toRole.currentHP))
       return;
-    }
 
     let fromRoleAttack = rand(fromRole.attackMin, fromRole.attackMax);
     let toRoleDefense = rand(toRole.defenseMin, toRole.defenseMax);
     let harm = Math.max(fromRoleAttack - toRoleDefense, 0);
     toRole.currentHP = Math.max(toRole.currentHP - harm, 0);
     this.messageQueue.pull({
-      type: MessageType.FIGHT,
+      type: MessageType.ATTACKER,
       data: {
         fromRole: fromRole,
         toRole: toRole,
@@ -117,27 +120,29 @@ export class FightScene {
 
   // 回合结束, 检查各个游戏角色状态
   roundOver() {
-    // 玩家失败
-    if (FightScene.isDead(this.player)) {
-      this.messageQueue.pull(Messages.lose(this.player));
-      this.status = FightStatus.REJUVENATION;
-      this.rejuvenation();
-    }
+    setTimeout(() => {
+      // 玩家失败
+      if (FightScene.isDead(this.player)) {
+        this.messageQueue.pull(Messages.lose(this.player));
+        this.status = FightStatus.REJUVENATION;
+        this.rejuvenation();
+      }
 
-    // 敌人失败
-    else if (FightScene.isDead(this.enemy)) {
-      this.messageQueue.pull(Messages.text('战斗胜利, ^o^Y!'));
-      execMethod(this.event.onLiquidation, null, [false]);
-      this.liquidation();
-      this.countdownNextEnemies();
+      // 敌人失败
+      else if (FightScene.isDead(this.enemy)) {
+        this.messageQueue.pull(Messages.text('战斗胜利, ^o^Y!'));
+        execMethod(this.event.onLiquidation, null, [false]);
+        this.liquidation();
+        this.countdownNextEnemies();
 
-    }
+      }
 
-    // 继续下个回合
-    else {
-      this.roundCounter++;
-      execMethod(this.event.onManual, null, [true]);
-    }
+      // 继续下个回合
+      else {
+        this.roundCounter++;
+        execMethod(this.event.onManual, null, [true]);
+      }
+    }, 500);
   }
 
   // 判断角色是否死亡
@@ -163,6 +168,7 @@ export class FightScene {
   // 角色死亡活力恢复
   private rejuvenation() {
     if (this.player.maxHP == this.player.currentHP) {
+      this.countdownNextEnemies();
       return;
     }
 
@@ -183,16 +189,15 @@ export class FightScene {
   // 倒计时寻找下个敌人
   countdownNextEnemies() {
     execMethod(this.event.onLiquidation);
+    execMethod(this.event.onManual, null, [false]);
 
-    let cd = 5;
+    this.messageQueue.pull(Messages.text('正在寻找敌人...'));
+    let cd = 1;
     this.nextEnemiesTimer = setInterval(() => {
-      if (cd <= 0) {
-        this.nextEnemies();
+      if (cd-- <= 0) {
         clearInterval(this.nextEnemiesTimer);
-        return;
+        this.nextEnemies();
       }
-      this.messageQueue.pull(Messages.text('正在寻找敌人 ' + cd));
-      cd--;
     }, 1000);
   }
 
@@ -202,7 +207,8 @@ export class FightScene {
     this.enemy = this.gameMap.generateEnemy();
     this.enemy.currentHP = this.enemy.maxHP;
     this.enemy.currentMP = this.enemy.maxMP;
-    this.messageQueue.pull(Messages.text(`遇到 ${this.enemy.name}*1, 准备战斗!`));
+    // this.messageQueue.pull(Messages.text(`遇到 ${this.enemy.name}*1, 准备战斗!`));
+    this.messageQueue.pull(Messages.encounterEnemy([this.enemy]));
     execMethod(this.event.onFindEnemy, null, [[this.enemy]]);
     this.fightStart();
   }
@@ -210,11 +216,84 @@ export class FightScene {
   // 结算
   private liquidation() {
     this.messageQueue.pull(Messages.text('正在结算...'));
-
-    // 经验 = 怪物等级 / 玩家等级 + 怪物血量/10 + 玩家等级
-    let exp = Math.ceil(this.enemy.level / this.player.level + this.enemy.maxHP / 10 + (this.enemy.level - this.player.level));
-    this.player.appendExp(exp);
+    let exp = players.addExp([this.enemy]);
     this.messageQueue.pull(Messages.liquidation(`经验+${exp}`));
+  }
 
+  // 普通防御
+  normalDefense() {
+    execMethod(this.event.onRoundStart, this);
+    execMethod(this.event.onManual, null, [false]);
+
+    this.doNormalDefense(this.enemy, this.player);
+    this.fightOver();
+  }
+
+  // 攻击 => 防御
+  // 防御方使用最大防御值
+  private doNormalDefense(attackRole: GameRole, defenseRole: GameRole) {
+    if ((0 == attackRole.currentHP) || (0 == defenseRole.currentHP))
+      return;
+    this.messageQueue.pull(Messages.defense(defenseRole));
+
+    let fromRoleAttack = rand(attackRole.attackMin, attackRole.attackMax);
+    let harm = Math.max(fromRoleAttack - defenseRole.defenseMax, 0);
+    defenseRole.currentHP = Math.max(defenseRole.currentHP - harm, 0);
+    this.messageQueue.pull({
+      type: MessageType.ATTACKER,
+      data: {
+        fromRole: attackRole,
+        toRole: defenseRole,
+        harm: harm,
+        extra: (0 == harm ? `${defenseRole.name}灵巧躲过攻击` : "")
+      }
+    });
+
+    if (!defenseRole.currentHP)
+      this.messageQueue.pull(Messages.dead(defenseRole));
+  }
+
+  // 当前玩家逃跑
+  playerEscape() {
+    execMethod(this.event.onManual, null, [false]);
+
+    // 30%几率逃跑失败
+    // 逃跑成功
+    if (0.3 > Math.random()) {
+      this.messageQueue.pull(Messages.escape(this.player, true));
+      this.rejuvenation();
+      return;
+    }
+
+    // 逃跑失败受到1.5倍伤害
+    else {
+      this.doEscapeFailure(this.enemy, this.player);
+      this.roundOver();
+    }
+  }
+
+  // 逃跑失败收到惩罚
+  // 逃跑失败受到1.5倍伤害
+  private doEscapeFailure(attackRole: GameRole, defenseRole: GameRole) {
+    if ((0 == attackRole.currentHP) || (0 == defenseRole.currentHP))
+      return;
+    this.messageQueue.pull(Messages.escape(this.player, false));
+
+    let fromRoleAttack = rand(attackRole.attackMin, attackRole.attackMax);
+    let harm = Math.ceil(Math.max(fromRoleAttack, 1) * 1.5);
+
+    defenseRole.currentHP = Math.max(defenseRole.currentHP - harm, 0);
+    this.messageQueue.pull({
+      type: MessageType.ATTACKER,
+      data: {
+        fromRole: attackRole,
+        toRole: defenseRole,
+        harm: harm,
+        extra: (0 == harm ? `${defenseRole.name}灵巧躲过攻击` : "")
+      }
+    });
+
+    if (!defenseRole.currentHP)
+      this.messageQueue.pull(Messages.dead(defenseRole));
   }
 }

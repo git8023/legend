@@ -96,28 +96,34 @@
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
             </div>
-            <div class="defense box">
+            <div class="defense box" (click)="normalDefense()">
               <img src="/assets/fight/skill/defense.png" alt="">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
           </div>
-          <div class="prop-list flex-h">
-            <div class="prop box flex-1">
-              <div class="skill_wait" [skill-wait]="isPause"></div>
+          <div>
+            <div class="prop-list flex-h">
+              <div class="prop box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="prop box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="prop box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="prop box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="prop box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
+              <div class="prop box flex-1">
+                <div class="skill_wait" [skill-wait]="isPause"></div>
+              </div>
             </div>
-            <div class="prop box flex-1">
-              <div class="skill_wait" [skill-wait]="isPause"></div>
-            </div>
-            <div class="prop box flex-1">
-              <div class="skill_wait" [skill-wait]="isPause"></div>
-            </div>
-            <div class="prop box flex-1">
-              <div class="skill_wait" [skill-wait]="isPause"></div>
-            </div>
-            <div class="prop box flex-1">
-              <div class="skill_wait" [skill-wait]="isPause"></div>
-            </div>
-            <div class="prop box flex-1">
+            <div class="escape box" (click)="doEscape()">
+              <img src="/assets/fight/skill/escape.png" alt="">
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
           </div>
@@ -137,13 +143,17 @@
           <span *ngIf="1 == msg.type">
             <span class="{{msg.data.fromRole.isPlayer?'player':'enemy'}}">{{msg.data.fromRole.name}}</span>
             (<span class="{{msg.data.skill?'skill_name':'normal_attack'}}">{{msg.data.skill || '普通攻击'}}</span>)
-            对
-            <span class="{{msg.data.toRole.isPlayer?'player':'enemy'}}">{{msg.data.toRole.name}}</span>
-            造成
-            <span class="harm">{{msg.data.harm}}</span>
-            点伤害.
+            对<span class="{{msg.data.toRole.isPlayer?'player':'enemy'}}">{{msg.data.toRole.name}}</span>
+            造成<span class="harm">{{msg.data.harm}}</span>点伤害.
           </span>
-          <span *ngIf="msg.data.extra">{{msg.data.extra}}</span>
+          <span *ngIf="3 == msg.type">
+            <span class="{{msg.data.fromRole.isPlayer?'player':'enemy'}}">{{msg.data.fromRole.name}}</span>
+            采取主动防御.
+          </span>
+          <span *ngIf="4 == msg.type">
+            遇到敌人 <span class="enemy" *ngFor="let enemy of msg.data.extra">{{enemy.name}}*1</span> 准备战斗.
+          </span>
+          <span *ngIf="msg.data.extra">{{showExtra(msg.data.extra)}}</span>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import {GameMap, GameMaps} from '../../game/GameMap';
 import {GameRole} from '../../game/role/GameRole';
 import {FightScene} from '../../game/FightScene';
 import {Player} from '../../game/role/Player';
+import {isString} from 'util';
 
 @Component({
   selector: 'app-fight',
@@ -14,18 +15,7 @@ export class FightComponent implements OnInit {
   @ViewChild('fightInfoRef', {static: true}) fightInfoRef: ElementRef;
 
   gameMap: GameMap;
-  player: Player = Player.create({
-    name: '七月',
-    pic: '/assets/fight/headPic/player-1.png',
-    level: 1,
-    maxHP: 20,
-    maxMP: 15,
-    speed: 5,
-    attackMin: 10,
-    attackMax: 15,
-    defenseMin: 1,
-    defenseMax: 2,
-  });
+  player: Player;
   enemy: GameRole;
 
   // 战斗场景
@@ -46,10 +36,7 @@ export class FightComponent implements OnInit {
     this.gameMap = GameMaps[mapKey] || GameMaps.XING_ZI_LIN;
 
     // 创建游戏场景
-    this.fightScene = new FightScene(this.gameMap, this.player);
-
-    console.log(this.player.exp.currentExp / this.player.exp.levelUpExp * 100 + '%');
-
+    this.fightScene = new FightScene(this.gameMap);
     this.fightScene.fightEvent({
       // onStart: () => this.isPause = false,
       // onRoundStart: () => this.isPause = false,
@@ -59,12 +46,28 @@ export class FightComponent implements OnInit {
       onFindEnemy: (enemies: GameRole[]) => this.enemy = enemies[0],
       onManual: isManual => this.isPause = !isManual
     });
+    this.player = this.fightScene.player;
     this.fightScene.countdownNextEnemies();
   }
 
-  // 准备攻击(敌人/队友)
+  // 普通攻击(敌人/队友)
   normalAttack() {
     this.fightScene.normalAttack();
   }
 
+  // 普通防御
+  normalDefense() {
+    this.fightScene.normalDefense();
+  }
+
+  // 显示额外文本内容
+  showExtra(extra: any) {
+    if (isString(extra))
+      return extra;
+  }
+
+  // 玩家逃跑
+  doEscape() {
+    this.fightScene.playerEscape();
+  }
 }

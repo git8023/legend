@@ -1,5 +1,5 @@
 import {MasterRole} from './role/MasterRole';
-import {rand, randA} from '../common/utils';
+import {randA} from '../common/utils';
 
 export interface GameMap {
   // ID
@@ -23,8 +23,12 @@ export interface GameMap {
   // 敌人列表
   enemies?: MasterRole[];
 
+  // 遭遇Boss概率(0~1)
+  bossRate?: number;
+
   // 生成敌人
   generateEnemy?: () => MasterRole;
+
 }
 
 let xingZiLin: GameMap = {
@@ -40,15 +44,71 @@ let xingZiLin: GameMap = {
       level: 1,
       maxHP: 10,
       maxMP: 5,
+      speed: 3,
+      attackMin: 1,
+      attackMax: 3,
+      defenseMin: 0,
+      defenseMax: 1,
+    }),
+    MasterRole.of({
+      name: '野猪',
+      pic: '/assets/fight/master/wild_pig.png',
+      level: 1,
+      maxHP: 12,
+      maxMP: 5,
       speed: 1,
+      attackMin: 1,
+      attackMax: 2,
+      defenseMin: 0,
+      defenseMax: 1,
+    }),
+    MasterRole.ofBoss({
+      name: '小陆龟',
+      pic: '/assets/fight/master/tortoise.png',
+      level: 2,
+      maxHP: 15,
+      maxMP: 1,
+      speed: 0,
+      attackMin: 1,
+      attackMax: 3,
+      defenseMin: 2,
+      defenseMax: 5
+    }),
+    MasterRole.ofBoss({
+      name: '小树妖',
+      pic: '/assets/fight/master/dryad.png',
+      level: 2,
+      maxHP: 15,
+      maxMP: 1,
+      speed: 2,
       attackMin: 1,
       attackMax: 5,
       defenseMin: 1,
-      defenseMax: 2,
-    })
+      defenseMax: 3
+    }),
+    MasterRole.ofBoss({
+      name: '野猪王',
+      pic: '/assets/fight/master/wild_pig_king.png',
+      level: 5,
+      maxHP: 35,
+      maxMP: 10,
+      speed: 5,
+      attackMin: 3,
+      attackMax: 7,
+      defenseMin: 2,
+      defenseMax: 5
+    }),
   ],
+  bossRate: 10 / 100,
   generateEnemy: function () {
-    return randA<MasterRole>(this.enemies);
+    while (true) {
+      let master = randA<MasterRole>(this.enemies);
+      if (!master.isBoss)
+        return master;
+
+      if (Math.random() <= this.bossRate)
+        return master;
+    }
   }
 };
 

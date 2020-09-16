@@ -5,11 +5,17 @@ export enum MessageType {
   // 普通文本消息
   TEXT,
 
-  // 战斗消息
-  FIGHT,
+  // 发起进攻
+  ATTACKER,
 
   // 结算
-  LIQUIDATION
+  LIQUIDATION,
+
+  // 主动防御
+  DEFENSE,
+
+  // 遇敌
+  ENCOUNTER_ENEMY,
 }
 
 // 战斗数据消息
@@ -37,36 +43,41 @@ export interface Message {
 // 游戏消息库
 export class Messages {
 
-  /**
-   * 创建角色死亡消息
-   * @param role 游戏角色
-   */
+  // 创建角色死亡消息
   static dead(role: GameRole): Message {
     return this.text(`${role.name}已死亡!!!`);
   }
 
-  /**
-   * 战斗失败
-   * @param role 游戏角色
-   */
+  // 战斗失败
   static lose(role: GameRole): Message {
-    return this.text(`战斗失败, ${role.name}活力恢复中...`);
+    return this.text(`战斗失败活力恢复中...`);
   }
 
-  /**
-   * 文本消息
-   * @param extra 消息描述
-   */
+  // 文本消息
   static text(extra: string): Message {
     return {type: MessageType.TEXT, data: {extra: extra}};
   }
 
-  /**
-   * 结算消息
-   * @param extra 消息描述
-   */
+  // 结算消息
   static liquidation(extra: string): Message {
     return {type: MessageType.LIQUIDATION, data: {extra: extra}};
+  }
+
+  // 防御消息
+  static defense(role: GameRole): Message {
+    return {type: MessageType.DEFENSE, data: {fromRole: role}};
+  }
+
+  // 遇敌消息
+  static encounterEnemy(enemies: GameRole[]): Message {
+    return {type: MessageType.ENCOUNTER_ENEMY, data: {extra: enemies}};
+  }
+
+  // 逃跑
+  static escape(role: GameRole, success: boolean): Message {
+    if (success)
+      return this.text(`${role.name} 逃跑成功, 活力恢复中...`);
+    return this.text(`${role.name} 逃跑失败! 受到背击造成1.5倍伤害.`);
   }
 }
 
