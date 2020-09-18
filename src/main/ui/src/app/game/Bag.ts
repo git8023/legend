@@ -1,5 +1,5 @@
 import {GameProp} from './gameProp/GameProp';
-import {concatA, findA} from '../common/utils';
+import {concatA} from '../common/utils';
 import {Equipment} from "./gameProp/Equipment";
 
 export class Bag {
