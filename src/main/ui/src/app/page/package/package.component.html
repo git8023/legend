@@ -1,1 +1,18 @@
-<p>package works!</p>
+<div class="main">
+
+  <div class="inline-block border-box relative">
+
+    <!--背景-->
+    <img src="/assets/bag-bg.png" class="background" alt="">
+
+    <div class="grid-container">
+      <div class="cell" *ngFor="let prop of bag.props">
+        <img [src]="prop.pic" alt="">
+      </div>
+    </div>
+
+    <div class="gold absolute">999,999,999</div>
+    <div class="score absolute">999,999,999</div>
+
+  </div>
+</div>

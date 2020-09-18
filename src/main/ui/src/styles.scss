@@ -56,6 +56,14 @@ area {
   position: relative;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
+.block {
+  display: block;
+}
+
 .font-size-0 {
   font-size: 0;
 }
@@ -99,6 +107,7 @@ area {
     background: #820f0f;
   }
 }
+
 
 //<editor-fold desc="动画">
 @keyframes duration-delete {
