@@ -1,5 +1,6 @@
 // 消息类型
 import {GameRole} from './role/GameRole';
+import {GameProp} from './gameProp/GameProp';
 
 export enum MessageType {
   // 普通文本消息
@@ -16,6 +17,9 @@ export enum MessageType {
 
   // 遇敌
   ENCOUNTER_ENEMY,
+
+  // 获得道具
+  GATHER_GAME_PROP,
 }
 
 // 战斗数据消息
@@ -30,6 +34,10 @@ export interface FightMessageData {
   skill?: string;
   // 额外消息
   extra?: any;
+  // 道具
+  // Key: 数量
+  // Value: 道具列表, 每个道具都有相同数量
+  gameProp?: GameProp;
 }
 
 // 游戏消息接口
@@ -78,6 +86,11 @@ export class Messages {
     if (success)
       return this.text(`${role.name} 逃跑成功, 活力恢复中...`);
     return this.text(`${role.name} 逃跑失败! 受到背击造成1.5倍伤害.`);
+  }
+
+  // 获取游戏道具
+  static gatherGameProp(prop: GameProp): Message {
+    return {type: MessageType.GATHER_GAME_PROP, data: {gameProp: prop}};
   }
 }
 

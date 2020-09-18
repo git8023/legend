@@ -1,5 +1,7 @@
 import {MasterRole} from './role/MasterRole';
 import {randA} from '../common/utils';
+import {GameProp} from './gameProp/GameProp';
+import {Equipment} from './gameProp/Equipment';
 
 export interface GameMap {
   // ID
@@ -22,6 +24,9 @@ export interface GameMap {
 
   // 敌人列表
   enemies?: MasterRole[];
+
+  // 本地图装备列表
+  gameProps?: Equipment[];
 
   // 遭遇Boss概率(0~1)
   bossRate?: number;
@@ -98,6 +103,9 @@ let xingZiLin: GameMap = {
       defenseMin: 2,
       defenseMax: 5
     }),
+  ],
+  gameProps: [
+    // FIXME 定义当前地图可以获取哪些装备
   ],
   bossRate: 10 / 100,
   generateEnemy: function () {

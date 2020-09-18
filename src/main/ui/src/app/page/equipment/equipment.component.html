@@ -1,8 +1,66 @@
 <div class="main">
+
+  <!--背景-->
   <img src="/assets/equipment-bg.png" class="background" alt="">
+
+  <!--装备-->
   <div class="position-box">
     <div class="helmet item">头盔</div>
     <div class="armour item">铠甲</div>
     <div class="weapon item">武器</div>
+    <div class="leg-guard item">护腿</div>
+    <div class="shoe item">鞋子</div>
+  </div>
+
+  <!--属性-->
+  <div class="props-box">
+    <div class="name">{{player.name}}</div>
+    <div class="prop">
+      <div>等&emsp;级:</div>
+      <div class="level">Lv.{{player.level}}(32%)</div>
+    </div>
+    <div class="progress level-percent">
+      <div class="bar" style="width:32%"></div>
+    </div>
+
+    <div class="prop flex-h flex-center">
+      <div>生命值:</div>
+      <div class="flex-1 progress">
+        <div class="bar" [ngStyle]="{width:player.currentHP/player.maxHP*100+'%'}">
+          {{player.currentHP}}/{{player.maxHP}}
+        </div>
+      </div>
+    </div>
+    <div class="prop flex-h flex-center">
+      <div>魔法值:</div>
+      <div class="flex-1 progress magic-point">
+        <div class="bar" [ngStyle]="{width:player.currentMP/player.maxMP*100+'%'}">
+          {{player.currentMP}}/{{player.maxMP}}
+        </div>
+      </div>
+    </div>
+    <div class="prop">
+      <div>攻&emsp;击:</div>
+      <div class="val">
+        {{player.attackMin}} <span class="equipment-buf">2</span>
+        ~
+        {{player.attackMax}} <span class="equipment-buf">11</span>
+      </div>
+    </div>
+    <div class="prop">
+      <div>防&emsp;御:</div>
+      <div class="val">
+        {{player.defenseMin}} <span class="equipment-buf">2</span>
+        ~
+        {{player.defenseMax}} <span class="equipment-buf">11</span>
+      </div>
+    </div>
+    <div class="prop">
+      <div>速&emsp;度:</div>
+      <div class="val">
+        {{player.speed}}
+        <span class="equipment-buf">3</span>
+      </div>
+    </div>
   </div>
 </div>

@@ -28,12 +28,23 @@ export class GameRole {
   // 最大防御
   defenseMax: number;
 
-  constructor(name: string, pic: string, level: number, maxHP: number, maxMP: number, speed: number, attackMin: number, attackMax: number, defenseMin: number, defenseMax: number) {
+  constructor(
+    name: string,
+    pic: string,
+    level: number,
+    maxHP: number,
+    maxMP: number,
+    speed: number,
+    attackMin: number,
+    attackMax: number,
+    defenseMin: number,
+    defenseMax: number
+  ) {
     this.name = name;
     this.pic = pic;
     this.level = level;
-    this.maxHP = maxHP;
-    this.maxMP = maxMP;
+    this.currentHP = this.maxHP = maxHP;
+    this.currentMP = this.maxMP = maxMP;
     this.speed = speed;
     this.attackMin = attackMin;
     this.attackMax = attackMax;

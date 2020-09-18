@@ -1,5 +1,6 @@
 import {GameRole} from './GameRole';
 import {eachA} from '../../common/utils';
+import {Bag} from '../Bag';
 
 // 等级经验
 class LevelExp {
@@ -70,6 +71,7 @@ class LevelExp {
 export class Player extends GameRole {
 
   exp: LevelExp = LevelExp.create();
+  bag: Bag = new Bag();
 
   // 创建玩家数据
   static create(role: GameRole): Player {

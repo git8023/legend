@@ -3,6 +3,9 @@ import {Message, Messages, MessageType} from "./Message";
 import {GameRole} from './role/GameRole';
 import {GameMap} from './GameMap';
 import {Player, players} from './role/Player';
+import {GameProp} from './gameProp/GameProp';
+import {GamePropManager} from './gameProp/GamePropManager';
+import {MasterRole} from './role/MasterRole';
 
 // 战斗状态
 export enum FightStatus {
@@ -42,7 +45,7 @@ export class FightScene {
   // 当前玩家
   player: Player;
   // 敌人
-  enemy: GameRole;
+  enemy: MasterRole;
   // 场景消息队列
   messageQueue: MessageQueue<Message> = new MessageQueue<Message>(20);
   // 战斗事件
@@ -216,8 +219,14 @@ export class FightScene {
   // 结算
   private liquidation() {
     this.messageQueue.pull(Messages.text('正在结算...'));
-    let exp = players.addExp([this.enemy]);
+    let enemies = [this.enemy];
+    let exp = players.addExp(enemies);
     this.messageQueue.pull(Messages.liquidation(`经验+${exp}`));
+
+    let gameProps: GameProp[] = GamePropManager.gatherGameProp(enemies);
+    this.player.bag.pull(gameProps);
+    gameProps.forEach(prop => this.messageQueue.pull(Messages.gatherGameProp(prop)))
+
   }
 
   // 普通防御

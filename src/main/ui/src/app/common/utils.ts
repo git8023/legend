@@ -261,12 +261,12 @@ export function removeA<T>(a: Array<T>, e: T, k?: string | ((el: T, i: number) =
 
 /**
  * 合并
- * @param {Array<T>} t 目标数组
- * @param {Array<T>} s 元素组
+ * @param {Array<T>} dest 目标数组
+ * @param {Array<T>} from 元素组
  */
-export function concatA<T>(t: Array<T>, s: Array<T>) {
-  if (!isArray(t) || !isArray(s)) throw '无效数组参数';
-  Array.prototype.push.apply(t, s);
+export function concatA<T>(dest: Array<T>, from: Array<T>) {
+  if (!isArray(dest) || !isArray(from)) throw '无效数组参数';
+  Array.prototype.push.apply(dest, from);
 }
 
 /**

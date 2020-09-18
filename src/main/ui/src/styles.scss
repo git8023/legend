@@ -92,6 +92,15 @@ area {
   transition: height 1s, opacity 1s;
 }
 
+.progress {
+  background: #8d5858;
+
+  .bar {
+    background: #820f0f;
+  }
+}
+
+//<editor-fold desc="动画">
 @keyframes duration-delete {
   0% {
     height: auto;
@@ -102,6 +111,8 @@ area {
     opacity: 0;
   }
 }
+
+//</editor-fold>
 
 //</editor-fold>
 

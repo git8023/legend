@@ -153,6 +153,9 @@
           <span *ngIf="4 == msg.type">
             遇到敌人 <span class="enemy" *ngFor="let enemy of msg.data.extra">{{enemy.name}}*1</span> 准备战斗.
           </span>
+          <span *ngIf="5 == msg.type">
+            获得 <span class="enemy">{{msg.data.gameProp.name}}*1</span>.
+          </span>
           <span *ngIf="msg.data.extra">{{showExtra(msg.data.extra)}}</span>
         </div>
       </div>

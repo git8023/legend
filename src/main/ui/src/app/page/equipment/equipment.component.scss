@@ -25,7 +25,7 @@
       left: 0;
       width: 55px;
       height: 55px;
-      border: 5px solid #867d28;
+      //border: 5px solid #867d28;
       display: flex;
       align-items: center;
       justify-items: center;
@@ -41,15 +41,98 @@
     }
 
     .armour {
-      top: 250px;
-      right: 200px;
+      top: 220px;
+      right: 475px;
       left: auto;
     }
 
     .weapon {
-      top: 250px;
-      left: 200px;
+      top: 300px;
+      right: 310px;
+      left: auto;
     }
 
+    .leg-guard {
+      top: 440px;
+      left: 280px;
+    }
+
+    .shoe {
+      top: 555px;
+      left: 245px;
+    }
+
+  }
+
+  .props-box {
+    padding: 1rem;
+    text-align: left;
+    position: absolute;
+    right: 13rem;
+    top: 1rem;
+    background: rgba(0, 0, 0, 0.65);
+    font-size: 0.8rem;
+    line-height: 2rem;
+    color: #0fe;
+    width: 15rem;
+
+    .name {
+      color: #ffc800;
+    }
+
+    .progress {
+      color: #aaa;
+      font-size: .3rem;
+      line-height: 1.25rem;
+
+      .bar {
+        padding: 0 .5rem;
+      }
+
+      &.magic-point {
+        background: #496e8d;
+
+        .bar {
+          background: #095084;
+        }
+      }
+
+      &.level-percent {
+        background: #9899a0;
+        margin: 0 0 1rem;
+
+        .bar {
+          background: #ccc;
+          height: 5px;
+        }
+      }
+    }
+
+    .equipment-buf {
+      color: #ffc800;
+
+      &:before {
+        content: '(+';
+      }
+
+      &:after {
+        content: ')';
+      }
+    }
+
+    .prop {
+      display: flex;
+      align-items: center;
+
+      > * {
+        flex: 1;
+
+        &:first-child {
+          padding-right: 1rem;
+          flex: none;
+          width: 4rem;
+        }
+      }
+    }
   }
 }
