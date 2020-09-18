@@ -119,8 +119,8 @@ export class Players {
       maxHP: 20,
       maxMP: 15,
       speed: 5,
-      attackMin: 1,
-      attackMax: 15,
+      attackMin: 5,
+      attackMax: 25,
       defenseMin: 1,
       defenseMax: 3,
     });
@@ -138,6 +138,7 @@ export class Players {
       let exp = Math.ceil(enemy.level / this.current.level + enemy.maxHP / 10 + (enemy.level - this.current.level));
       totalExp += Math.max(1, exp);
     });
+    totalExp = Math.ceil(totalExp);
     this.current.appendExp(totalExp);
     return totalExp;
   }

@@ -15,6 +15,22 @@ export function clone(o: any) {
 }
 
 /**
+ * 按类型克隆对象
+ * @param o 源对象
+ * @param constructor 源对象构造器
+ */
+export function cloneType<T>(o: T, constructor?: Function): T {
+  if (!isObject(o))
+    return;
+
+  let ret = (constructor || o.constructor)()
+  eachA(keysO(ret), k => {
+    ret[k] = o[k]
+  });
+  return ret;
+}
+
+/**
  * 展开对象属性为ognl表达式
  * @param {array|object} o 数组或对象
  * @param {boolean} skipNullOrUndef=true 跳过值为null或undefined的属性
@@ -66,7 +82,7 @@ export function incrStep(star: number, end: number, step: number, f: (v) => bool
  * @param {(k, sv, dv) => (boolean | any)} [each] 控制函数, true-跳过本次, false-跳过后续, undefined-覆盖dest中k属性
  * @return dest
  */
-export function copyProps(src: object, dest: object, each?: (k, sv, dv) => boolean | any): object {
+export function copyProps<T>(src: object, dest: T, each?: (k, sv, dv) => boolean | any): T {
   each = isFunction(each) ? each : () => undefined;
   if (isObject(src) && isObject(dest) && !(isNullOrUndefined(src) || isNullOrUndefined(dest))) {
     eachO(src, (sv, k) => {
@@ -107,6 +123,21 @@ function G() {
  */
 export function guid(): string {
   return (G() + G() + "-" + G() + "-" + G() + "-" + G() + "-" + G() + G() + G()).toUpperCase();
+}
+
+/**
+ * 从from递增到to, 并将生成的数据追加到列表中
+ * @param from 开始位置
+ * @param to 结束位置(不包含)
+ * @param step 步长
+ * @param generator 数据生成器
+ * @returns 生成的数据列表
+ */
+export function forEachMap<T>(generator: () => T, to: number, from: number = 0, step: number = 1): T[] {
+  let ret: T[] = [];
+  for (; from < to; from += step)
+    ret.push(generator())
+  return ret;
 }
 
 //</editor-fold>
@@ -265,8 +296,8 @@ export function removeA<T>(a: Array<T>, e: T, k?: string | ((el: T, i: number) =
  * @param {Array<T>} from 元素组
  */
 export function concatA<T>(dest: Array<T>, from: Array<T>) {
-  if (!isArray(dest) || !isArray(from)) throw '无效数组参数';
-  Array.prototype.push.apply(dest, from);
+  if (isArray(dest) && isArray(from))
+    Array.prototype.push.apply(dest, from);
 }
 
 /**

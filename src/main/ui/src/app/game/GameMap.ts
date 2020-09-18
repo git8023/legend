@@ -1,7 +1,7 @@
 import {MasterRole} from './role/MasterRole';
 import {randA} from '../common/utils';
 import {GameProp} from './gameProp/GameProp';
-import {Equipment} from './gameProp/Equipment';
+import {Equipment, EquipmentStore} from './gameProp/Equipment';
 
 export interface GameMap {
   // ID
@@ -26,7 +26,7 @@ export interface GameMap {
   enemies?: MasterRole[];
 
   // 本地图装备列表
-  gameProps?: Equipment[];
+  equipments?: EquipmentStore;
 
   // 遭遇Boss概率(0~1)
   bossRate?: number;
@@ -34,6 +34,8 @@ export interface GameMap {
   // 生成敌人
   generateEnemy?: () => MasterRole;
 
+  // 道具总爆率(n%)
+  probability?: number
 }
 
 let xingZiLin: GameMap = {
@@ -104,10 +106,18 @@ let xingZiLin: GameMap = {
       defenseMax: 5
     }),
   ],
-  gameProps: [
-    // FIXME 定义当前地图可以获取哪些装备
-  ],
+  equipments: EquipmentStore.create([
+    {
+      name: '绯红铠甲',
+      pic: '/assets/equip/armour/armour_lv03_ruby.png',
+      note: '绯红宝石镶嵌的铠甲, 有着不菲防御',
+      probability: 1,
+      defenseMin: 1,
+      defenseMax: 2
+    }
+  ]),
   bossRate: 10 / 100,
+  probability: 1,
   generateEnemy: function () {
     while (true) {
       let master = randA<MasterRole>(this.enemies);

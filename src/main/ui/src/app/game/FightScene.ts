@@ -223,7 +223,7 @@ export class FightScene {
     let exp = players.addExp(enemies);
     this.messageQueue.pull(Messages.liquidation(`经验+${exp}`));
 
-    let gameProps: GameProp[] = GamePropManager.gatherGameProp(enemies);
+    let gameProps: GameProp[] = GamePropManager.gatherGameProp(enemies, this.gameMap);
     this.player.bag.pull(gameProps);
     gameProps.forEach(prop => this.messageQueue.pull(Messages.gatherGameProp(prop)))
 
