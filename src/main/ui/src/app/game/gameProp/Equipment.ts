@@ -1,5 +1,5 @@
 import {GameProp} from './GameProp';
-import {cloneType, copyProps, eachA, randA} from "../../common/utils";
+import {copyProps, eachA, randA} from "../../common/utils";
 
 // 装备
 export class Equipment extends GameProp {
@@ -25,6 +25,32 @@ export class Equipment extends GameProp {
   // 附加最大防御
   defenseMax?: number;
 
+  // 装备类型
+  type: EquipmentType;
+
+  static of(o: Equipment | object): Equipment {
+    return copyProps(o, new Equipment());
+  }
+}
+
+// 装备类型
+export enum EquipmentType {
+  // 头盔
+  HELMET,
+  // 铠甲
+  ARMOUR,
+  // 武器
+  WEAPON,
+  // 护腿
+  LEG_GUARD,
+  // 靴子
+  SHOE,
+  // 饰品
+  NECKLACE,
+  // 戒指
+  RING,
+  // 腰带
+  BELT,
 }
 
 // 装备仓库

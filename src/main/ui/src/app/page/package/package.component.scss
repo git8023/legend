@@ -1,6 +1,12 @@
 .main {
   position: relative;
   text-align: center;
+  display: flex;
+
+  &:before, &:after {
+    flex: 1;
+    content: ' ';
+  }
 
   .border-box {
   }
@@ -28,10 +34,16 @@
       width: 44.5px;
       height: 44.5px;
       margin: 3px 2.8px;
-      //background: rgba(255, 255, 255, 0.2);
       display: flex;
       justify-content: center;
       align-items: center;
+      background-repeat: no-repeat;
+      background-position: center;
+      //background: rgba(255, 255, 255, 0.2);
+
+      &.active {
+        border: 1px solid #e6bd29;
+      }
     }
   }
 
@@ -47,4 +59,51 @@
   .score {
     left: 220px;
   }
+
+  .detail-box {
+    min-width: 10rem;
+    min-height: 10rem;
+    border: 1px solid #fff;
+    background-image: linear-gradient(to bottom, #000, #9198e5);
+    color: #fff;
+
+    .top {
+      //border: 1px solid #fff;
+      padding: 1rem;
+
+      img {
+        width: 3rem;
+        margin-right: 1rem;
+        border: 2px solid #ffac00;
+        border-radius: .5rem;
+      }
+    }
+
+    .prop {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+
+      > * {
+        flex: 1;
+        text-align: left;
+        line-height: 1.5rem;
+        padding: 0 .5rem;
+
+        &:first-child {
+          flex: none;
+          width: 4rem;
+        }
+      }
+    }
+
+    .note {
+      padding: .5rem;
+      white-space: inherit;
+      max-width: 15rem;
+      text-align: left;
+    }
+  }
 }
+
+

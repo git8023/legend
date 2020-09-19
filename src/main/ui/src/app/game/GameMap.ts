@@ -1,7 +1,6 @@
 import {MasterRole} from './role/MasterRole';
 import {randA} from '../common/utils';
-import {GameProp} from './gameProp/GameProp';
-import {Equipment, EquipmentStore} from './gameProp/Equipment';
+import {EquipmentStore, EquipmentType} from './gameProp/Equipment';
 
 export interface GameMap {
   // ID
@@ -111,9 +110,11 @@ let xingZiLin: GameMap = {
       name: '绯红铠甲',
       pic: '/assets/equip/armour/02_01.png',
       note: '绯红宝石镶嵌的铠甲, 有着不菲防御',
+      lv: 2,
       probability: 1,
       defenseMin: 1,
-      defenseMax: 2
+      defenseMax: 2,
+      type: EquipmentType.ARMOUR
     }
   ]),
   bossRate: 10 / 100,

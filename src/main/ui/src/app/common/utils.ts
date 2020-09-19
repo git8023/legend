@@ -218,7 +218,7 @@ export function keysO(o: any): Array<string> {
  * @param {Array<T>} a
  * @param {((e: T, i?: number|string) => boolean) | void | any} f
  */
-export function eachA<T>(a: Array<T>, f?: (((e: T, i?: number | string) => boolean) | void | any)) {
+export function eachA<T>(a: Array<T>, f?: (e: T, i?: number) => (boolean | any)) {
   if (!isArray(a)) return a;
   if (!isFunction(f)) f = () => true;
   for (let i = 0, len = a.length; i < len; i++)
@@ -510,7 +510,7 @@ export function dateParse(dateStr: string, pattern: string): Date | null {
         let onlyNumberDateStr = orgiDateStr.replace(/[^\d]+/g, "");
         // 把原pattern中的年月日时分秒解为有序的正则表达式数组,
         let originValueIndex = 0;
-        eachA(tgtPattern.match(groupRegExp), function (metaGroup) {
+        eachA<string>(tgtPattern.match(groupRegExp), function (metaGroup) {
           // :> 设置每个组的 beginIndex, pLength, original
           let meta = _this.metas[metaGroup[0]];
           meta.beginIndex = tgtPattern.indexOf(metaGroup);

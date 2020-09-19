@@ -1,18 +1,62 @@
 <div class="main">
 
   <div class="inline-block border-box relative">
-
     <!--背景-->
     <img src="/assets/bag-bg.png" class="background" alt="">
 
     <div class="grid-container">
-      <div class="cell" *ngFor="let prop of bag.props">
-        <img [src]="prop.pic" alt="">
-      </div>
+      <div class="cell" *ngFor="let prop of bag.props; let i=index"
+           [class.active]="prop == currentProp"
+           [ngStyle]="{'background-image':prop?('url('+prop.pic+')'):'none'}"
+           (click)="showDetail($event,prop)"
+           (dblclick)="useGameProp(prop,i)"></div>
     </div>
 
     <div class="gold absolute">999,999,999</div>
     <div class="score absolute">999,999,999</div>
+  </div>
+
+  <div *ngIf="currentProp" class="detail-box">
+    <div class="top">
+      <div class="flex-h text-left">
+        <img [src]="currentProp.pic" alt="">
+        <div class="name">
+          <div>{{currentProp.name}}【护甲】</div>
+          <div>等级 {{currentProp.lv ? ('Lv.' + currentProp.lv) : '无限制'}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="prop" *ngIf="currentProp.attackMax">
+        <div>攻&emsp;击:</div>
+        <div class="val">
+          {{currentProp.attackMin}} ~ {{currentProp.attackMax}}
+        </div>
+      </div>
+      <div class="prop" *ngIf="currentProp.hp">
+        <span>生命值:</span>
+        <span class="val">{{currentProp.hp}}</span>
+      </div>
+      <div class="prop" *ngIf="currentProp.defenseMax">
+        <div>防&emsp;御:</div>
+        <div class="val">
+          {{currentProp.defenseMin}} ~ {{currentProp.defenseMax}}
+        </div>
+      </div>
+      <div class="prop" *ngIf="currentProp.speed">
+        <div>速&emsp;度:</div>
+        <div class="val">
+          {{currentProp.speed}}
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      绯红宝石镶嵌的铠甲, 有着不菲防御
+    </div>
 
   </div>
 </div>
+
+

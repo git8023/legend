@@ -5,14 +5,55 @@
 
   <!--装备-->
   <div class="position-box">
-    <div class="helmet item">头盔</div>
-    <div class="armour item">铠甲</div>
-    <div class="weapon item">武器</div>
-    <div class="leg-guard item">护腿</div>
-    <div class="shoe item">靴子</div>
-    <div class="necklace item">饰品</div>
-    <div class="ring item">戒指</div>
-    <div class="belt item">腰带</div>
+    <div class="helmet item">
+      <div *ngIf="!equipments.equipments[0];else helmet">头盔</div>
+      <ng-template #helmet>
+        <div *ngIf="equipments.equipments[0]"
+             [ngStyle]="{'background-image':equipments.equipments[0].pic}"></div>
+      </ng-template>
+    </div>
+    <div class="armour item">
+      <div *ngIf="!equipments.equipments[1];else armour">铠甲</div>
+      <ng-template #armour>
+        <img [src]="equipments.equipments[1].pic" alt="">
+      </ng-template>
+    </div>
+    <div class="weapon item">
+      <div *ngIf="!equipments.equipments[2];else weapon">武器</div>
+      <ng-template #weapon>
+        <img [src]="equipments.equipments[2].pic" alt="">
+      </ng-template>
+    </div>
+    <div class="leg-guard item">
+      <div *ngIf="!equipments.equipments[3];else leg_guard">护腿</div>
+      <ng-template #leg_guard>
+        <img [src]="equipments.equipments[3].pic" alt="">
+      </ng-template>
+    </div>
+    <div class="shoe item">
+      <div *ngIf="!equipments.equipments[4];else shoe">靴子</div>
+      <ng-template #shoe>
+        <img [src]="equipments.equipments[4].pic" alt="">
+      </ng-template>
+    </div>
+    <div class="necklace item">
+      <div *ngIf="!equipments.equipments[5];else necklace">饰品</div>
+      <ng-template #necklace>
+        <img [src]="equipments.equipments[5].pic" alt="">
+      </ng-template>
+    </div>
+    <div class="ring item">
+      <div *ngIf="!equipments.equipments[6];else ring">戒指</div>
+      <ng-template #ring>
+        <img [src]="equipments.equipments[6].pic" alt="">
+      </ng-template>
+    </div>
+    <div class="belt item">
+      <div *ngIf="!equipments.equipments[7];else belt">腰带</div>
+      <ng-template #belt>
+        <img [src]="equipments.equipments[7].pic" alt="">
+      </ng-template>
+    </div>
   </div>
 
   <!--属性-->
@@ -20,10 +61,11 @@
     <div class="name">{{player.name}}</div>
     <div class="prop">
       <div>等&emsp;级:</div>
-      <div class="level">Lv.{{player.level}}(32%)</div>
+      <div class="level">Lv.{{player.level}}</div>
     </div>
     <div class="progress level-percent">
-      <div class="bar" style="width:32%"></div>
+      <div class="bar" [ngStyle]="{width:playerExtra.expPercent+'%'}" style="padding:0;"></div>
+      <div class="absolute">{{playerExtra.expPercent}}%</div>
     </div>
 
     <div class="prop flex-h flex-center">
@@ -45,24 +87,43 @@
     <div class="prop">
       <div>攻&emsp;击:</div>
       <div class="val">
-        {{player.attackMin}} <span class="equipment-buf">2</span>
+        {{player.attackMin}}
+        <span class="equipment-buf"
+              *ngIf="playerExtra.equipmentsWorth.attackMin">
+          {{playerExtra.equipmentsWorth.attackMin}}
+        </span>
         ~
-        {{player.attackMax}} <span class="equipment-buf">11</span>
+        {{player.attackMax}}
+        <span class="equipment-buf"
+              *ngIf="playerExtra.equipmentsWorth.attackMax">
+          {{playerExtra.equipmentsWorth.attackMax}}
+        </span>
       </div>
     </div>
     <div class="prop">
       <div>防&emsp;御:</div>
       <div class="val">
-        {{player.defenseMin}} <span class="equipment-buf">2</span>
+        {{player.defenseMin}}
+        <span class="equipment-buf"
+              *ngIf="playerExtra.equipmentsWorth.defenseMin">
+          {{playerExtra.equipmentsWorth.defenseMin}}
+        </span>
         ~
-        {{player.defenseMax}} <span class="equipment-buf">11</span>
+        {{player.defenseMax}}
+        <span class="equipment-buf"
+              *ngIf="playerExtra.equipmentsWorth.defenseMax">
+          {{playerExtra.equipmentsWorth.defenseMax}}
+        </span>
       </div>
     </div>
     <div class="prop">
       <div>速&emsp;度:</div>
       <div class="val">
         {{player.speed}}
-        <span class="equipment-buf">3</span>
+        <span class="equipment-buf"
+              *ngIf="playerExtra.equipmentsWorth.speed">
+          {{playerExtra.equipmentsWorth.speed}}
+        </span>
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 import {GameRole} from './GameRole';
-import {eachA} from '../../common/utils';
+import {clone, eachA, eachO} from '../../common/utils';
 import {Bag} from '../Bag';
+import {Equipment, EquipmentType} from "../gameProp/Equipment";
 
 // 等级经验
 class LevelExp {
@@ -22,9 +23,13 @@ class LevelExp {
   // levelUpExp *= (level - 1) + expGrowth
   expGrowth: number;
 
+  // 当前玩家
+  private player: Player;
+
   // 创建等级经验实例
-  static create(): LevelExp {
+  static create(player: Player): LevelExp {
     let lvExp = new LevelExp();
+    lvExp.player = player;
     lvExp.level = 1;
     lvExp.attributeGrowth = 0.2;
     lvExp.expGrowth = 0.3;
@@ -65,13 +70,21 @@ class LevelExp {
   upgradeAttribute(base: number): number {
     return Math.ceil(base * (1 + this.attributeGrowth));
   }
+
+  /**
+   * 已获取经验距离升级经验百分比: [0~100)
+   */
+  expPercent(): number {
+    return this.currentExp / this.levelUpExp * 100;
+  }
 }
 
 // 玩家
 export class Player extends GameRole {
 
-  exp: LevelExp = LevelExp.create();
-  bag: Bag = new Bag();
+  exp: LevelExp;
+  bag: Bag;
+  equipments: PlayerEquipments;
 
   // 创建玩家数据
   static create(role: GameRole): Player {
@@ -81,6 +94,9 @@ export class Player extends GameRole {
       role.attackMax, role.defenseMin, role.defenseMax
     );
     player.isPlayer = true;
+    player.bag = new Bag(player);
+    player.equipments = new PlayerEquipments(player);
+    player.exp = LevelExp.create(player);
     return player;
   }
 
@@ -103,6 +119,60 @@ export class Player extends GameRole {
 
     this.currentHP = this.maxHP;
     this.currentMP = this.maxMP;
+  }
+}
+
+// 玩家穿戴装备管理
+export class PlayerEquipments {
+
+  // 装备可以影响的玩家属性
+  static propsMap = {
+    hp: 'maxHP',
+    mp: 'maxMP',
+    speed: 'speed',
+    attackMin: 'attackMin',
+    attackMax: 'attackMax',
+    defenseMin: 'defenseMin',
+    defenseMax: 'defenseMax',
+  };
+  equipments: { [n: number]: Equipment } = {};
+
+  constructor(private player: Player) {
+  }
+
+  // 换装
+  replace(newly: Equipment): Equipment {
+
+    // 换装
+    let old = this.equipments[newly.type];
+    this.equipments[newly.type] = newly;
+
+    // 重新计算属性
+    eachO<number>(PlayerEquipments.propsMap, (playerKey, equipmentKey) => {
+      if (old)
+        this.player[playerKey] -= (old[equipmentKey] || 0);
+      this.player[playerKey] += (newly[equipmentKey] || 0);
+    });
+
+    return old;
+  }
+
+  // 装备附加值
+  getWorth(): EquipmentWorth {
+    let ew = new EquipmentWorth();
+    eachO<Equipment>(this.equipments, prop => eachO(prop, (v, k) => {
+      ew[k] = (ew[k] || 0) + (v || 0);
+    }));
+    return ew;
+  }
+}
+
+// 装备总附加值
+export class EquipmentWorth extends Equipment {
+  constructor() {
+    super();
+    eachO(this, (v, k) => this[k] = 0);
+    this.type = null;
   }
 }
 
