@@ -1,5 +1,4 @@
 import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
-import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 
 /**
  * 延迟删除
