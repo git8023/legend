@@ -9,6 +9,29 @@
   }
 
   .border-box {
+    .attribute-diff {
+      line-height: 1.25rem;
+      font-size: .8rem;
+      bottom: 105px;
+      left: 28px;
+      color: #fff;
+
+      .up .val {
+        color: #820f0f;
+
+        &:after {
+          content: '▲';
+        }
+      }
+
+      .down .val {
+        color: #13580d;
+
+        &:after {
+          content: '▼';
+        }
+      }
+    }
   }
 
   .background {

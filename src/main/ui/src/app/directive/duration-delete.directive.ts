@@ -1,5 +1,9 @@
 import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
+import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 
+/**
+ * 延迟删除
+ */
 @Directive({
   selector: '[durationDelete]'
 })
@@ -29,7 +33,8 @@ export class DurationDeleteDirective implements OnInit {
    * DOM删除后调用, 该函数如果使用到this对象必须使用指向函数方式实现 ()=>{}
    */
   @Input("onDeleted")
-  onDeleted?: (data: any) => void;
+  onDeleted?: (data?: any) => void = () => {
+  };
 
   constructor(
     private el: ElementRef,
@@ -39,7 +44,8 @@ export class DurationDeleteDirective implements OnInit {
 
   ngOnInit(): void {
     DurationDeleteDirective.caches.push(this);
-    let maxCache = this.configure.cacheLength || this.DEFAULT_CONFIG.cacheLength;
+    let cacheLength = this.configure.cacheLength;
+    let maxCache = isNaN(cacheLength) ? this.DEFAULT_CONFIG.cacheLength : cacheLength;
     if (++DurationDeleteDirective.currentCache > maxCache)
       DurationDeleteDirective.caches.shift().doDelete();
   }
@@ -57,7 +63,9 @@ export class DurationDeleteDirective implements OnInit {
         this.render.setStyle(dom, 'transition', `height ${duration}ms, opacity ${duration}ms`);
 
         // 由组件数据驱动删除
-        setTimeout(() => this.onDeleted(this.configure.data), duration);
+        setTimeout(() => {
+          this.onDeleted(this.configure.data);
+        }, duration);
 
       }, this.configure.displayDuration || this.DEFAULT_CONFIG.displayDuration);
     });

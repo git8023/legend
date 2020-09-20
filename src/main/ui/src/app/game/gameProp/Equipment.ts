@@ -28,7 +28,7 @@ export class Equipment extends GameProp {
   // 装备类型
   type: EquipmentType;
 
-  static of(o: Equipment | object): Equipment {
+  static of(o?: Equipment | object): Equipment {
     return copyProps(o, new Equipment());
   }
 }

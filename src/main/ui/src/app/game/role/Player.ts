@@ -135,6 +135,17 @@ export class PlayerEquipments {
     defenseMin: 'defenseMin',
     defenseMax: 'defenseMax',
   };
+
+  // 属性中文名
+  static propsCnNames = {
+    maxHP: '生命',
+    maxMP: '魔法',
+    speed: '速度',
+    attackMin: '最小攻击',
+    attackMax: '最大攻击',
+    defenseMin: '最小防御',
+    defenseMax: '最大防御',
+  }
   equipments: { [n: number]: Equipment } = {};
 
   constructor(private player: Player) {

@@ -14,6 +14,10 @@ export class PackageComponent implements OnInit {
 
   bag: Bag = players.getCurrent().bag;
   currentProp: Equipment;
+  replaceUpdateInfo: Array<{ name: string, value: number }> = [];
+  clearReplaceUpdateInfo = () => {
+    this.replaceUpdateInfo.length = 0;
+  };
 
   constructor() {
   }
@@ -52,6 +56,14 @@ export class PackageComponent implements OnInit {
     // 换装后数据
     let after = {};
     eachO<number>(before, (v, k) => after[k] = player[k]);
-    console.log(before, after);
+    // 差异
+    this.replaceUpdateInfo.length = 0;
+    eachO<number>(after, (v, k) => {
+      this.replaceUpdateInfo.push({
+        name: PlayerEquipments.propsCnNames[k],
+        value: v - (before[k] || 0)
+      });
+    });
+    console.log(before, after, this.replaceUpdateInfo);
   }
 }

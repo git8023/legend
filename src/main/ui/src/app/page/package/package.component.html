@@ -11,9 +11,20 @@
            (click)="showDetail($event,prop)"
            (dblclick)="useGameProp(prop,i)"></div>
     </div>
-
     <div class="gold absolute">999,999,999</div>
     <div class="score absolute">999,999,999</div>
+
+    <div class="absolute attribute-diff" *ngIf="replaceUpdateInfo.length">
+      <div class="text-left">
+        <ng-container *ngFor="let rui of replaceUpdateInfo">
+          <div *ngIf="0!=0<rui.value"
+               class="{{0<rui.value?'up':'down'}}"
+               [durationDelete]="{cacheLength:0}">
+            {{rui.name}} <span class="val">{{rui.value}}</span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="currentProp" class="detail-box">
@@ -58,5 +69,4 @@
 
   </div>
 </div>
-
 

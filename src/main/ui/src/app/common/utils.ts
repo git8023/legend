@@ -79,18 +79,16 @@ export function incrStep(star: number, end: number, step: number, f: (v) => bool
  * 属性拷贝
  * @param {object} src 来源
  * @param {object} dest 目标
- * @param {(k, sv, dv) => (boolean | any)} [each] 控制函数, true-跳过本次, false-跳过后续, undefined-覆盖dest中k属性
+ * @param {(k, sv, dv) => (boolean | any)} [eachFn] 控制函数, true-跳过本次, false-跳过后续, undefined-覆盖dest中k属性
  * @return dest
  */
-export function copyProps<T>(src: object, dest: T, each?: (k, sv, dv) => boolean | any): T {
-  each = isFunction(each) ? each : () => undefined;
-  if (isObject(src) && isObject(dest) && !(isNullOrUndefined(src) || isNullOrUndefined(dest))) {
-    eachO(src, (sv, k) => {
-      const hr = each(k, sv, dest[k]);
-      if (undefined === hr) dest[k] = sv;
-      return hr;
-    });
-  }
+export function copyProps<T>(src: object, dest: T, eachFn?: (k, sv, dv) => boolean | any): T {
+  eachFn = isFunction(eachFn) ? eachFn : () => undefined;
+  eachO(src, (sv, k) => {
+    const hr = eachFn(k, sv, dest[k]);
+    if (undefined === hr) dest[k] = sv;
+    return hr;
+  });
   return dest;
 }
 
@@ -150,9 +148,10 @@ export function forEachMap<T>(generator: () => T, to: number, from: number = 0, 
  * @param {(v: T, k: (string | any)) => (boolean | any)} f 属性处理函数
  */
 export function eachO<T>(o: object, f: (v: T, k: string | any) => boolean | any) {
-  for (const k in o)
-    if (o.hasOwnProperty(k) && false === f(o[k], k))
-      break;
+  if (o)
+    for (const k in o)
+      if (o.hasOwnProperty(k) && false === f(o[k], k))
+        break;
 }
 
 /**

@@ -2,14 +2,17 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
-  OnChanges, OnInit,
+  OnChanges,
+  OnInit,
   Output,
   Renderer2,
   SimpleChanges
 } from '@angular/core';
 
+/**
+ * 技能等待蒙层
+ */
 @Directive({
   selector: '[skill-wait]'
 })
