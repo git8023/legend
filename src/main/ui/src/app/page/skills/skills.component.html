@@ -1,1 +1,90 @@
-<p>skills works!</p>
+<div class="skills margin-center">
+
+  <!--<div class="skill">-->
+  <!--  <div class="flex-h flex-center">-->
+  <!--    <img src="/assets/img/fight/skill/er_lian_ci.png" alt="" class="icon">-->
+  <!--    <div class="detail flex-1">-->
+  <!--      <div class="flex-h flex-children-avg">-->
+  <!--        <span>二连刺</span>-->
+  <!--        <span>Lv.2</span>-->
+  <!--      </div>-->
+  <!--      <div class="flex-h flex-children-avg">-->
+  <!--        <span>MP: 2</span>-->
+  <!--        <span>CD: 2回合</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  <div class="note">-->
+  <!--    快速刺出两剑攻向敌人要害，造成两段伤害。-->
+  <!--    <div>-->
+  <!--      <span class="color-green">首段攻击</span>:-->
+  <!--      <span class="color-red">[必中]</span>最大攻击<span class="color-red">5%</span>+最小攻击-->
+  <!--    </div>-->
+  <!--    <div>-->
+  <!--      <span class="color-green">二段攻击</span>:-->
+  <!--      首段攻击<span class="color-red">50%</span>对敌人造成二次伤害-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</div>-->
+  <!--<div class="skill">-->
+  <!--  <div class="flex-h flex-center">-->
+  <!--    <img src="/assets/img/fight/skill/bing_shuang_hu_jia.bmp" alt="" class="icon">-->
+  <!--    <div class="detail flex-1">-->
+  <!--      <div class="flex-h flex-children-avg">-->
+  <!--        <span>霜冻护甲</span>-->
+  <!--        <span>Lv.5</span>-->
+  <!--      </div>-->
+  <!--      <div class="flex-h flex-children-avg">-->
+  <!--        <span>MP: 9</span>-->
+  <!--        <span>CD: 5回合</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  <div class="note">-->
+  <!--    伟大的<span class="color-green">肯尼迪大魔法师</span>赐予霜冻结界覆盖全身铠甲, 极大提高铠甲防御.-->
+  <!--    <div>-->
+  <!--      <div>Buff <span class="color-red">1回合</span></div>-->
+  <!--      <div>护甲 <span class="color-red"> +3</span></div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</div>-->
+  <!--<div class="skill">-->
+  <!--  <div class="flex-h flex-center">-->
+  <!--    <img src="/assets/img/fight/skill/shan_dian_lian.bmp" alt="" class="icon">-->
+  <!--    <div class="detail flex-1">-->
+  <!--      <div class="flex-h flex-children-avg">-->
+  <!--        <span>闪电链</span>-->
+  <!--        <span>Lv.7</span>-->
+  <!--      </div>-->
+  <!--      <div class="flex-h flex-children-avg">-->
+  <!--        <span>MP: 12</span>-->
+  <!--        <span>CD: 3回合</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  <div class="note">-->
+  <!--    发射出一道猛烈的闪电，并在附近的敌人身上不停的跳跃．每次跳跃损失 <span class="color-red">10%</span> 的攻击力.-->
+  <!--    <div>-->
+  <!--      <div>跳跃次数: <span class="color-red">3</span></div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</div>-->
+
+  <div class="skill" *ngFor="let skill of store">
+    <div class="flex-h flex-center">
+      <img [src]="skill.pic" alt="" class="icon">
+      <div class="detail flex-1">
+        <div class="flex-h flex-children-avg">
+          <span>{{skill.name}}</span>
+          <span>Lv.{{skill.lv}}</span>
+        </div>
+        <div class="flex-h flex-children-avg">
+          <span>MP: {{skill.mp}}</span>
+          <span>CD: {{skill.cd}}回合</span>
+        </div>
+      </div>
+    </div>
+    <div class="note" [innerHTML]="skill.noteHtml"></div>
+  </div>
+
+</div>

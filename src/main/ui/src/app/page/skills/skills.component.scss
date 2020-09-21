@@ -1,0 +1,36 @@
+.skills {
+  width: 30rem;
+  background: #496e8d;
+  padding: 1rem;
+  border-radius: .5rem;
+}
+
+.skill {
+  margin-top: 1rem;
+  border-radius: .3rem;
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, .5);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  .icon {
+    width: 3rem;
+    height: 3rem;
+    margin: .5rem;
+    border-radius: .5rem;
+    border: 1px solid #f00;
+  }
+
+  .detail {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ef8a48;
+  }
+
+  .note {
+    color: #fff;
+    //font-size: 0.7rem;
+    padding: 0 .5rem .5rem;
+  }
+}

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Skill, SkillStore} from '../../game/skill/Skill';
 
 @Component({
   selector: 'app-skills',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SkillsComponent implements OnInit {
 
-  constructor() { }
+  store: Array<Skill> = SkillStore.skills;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }

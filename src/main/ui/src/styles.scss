@@ -1,5 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+//@font-face {
+//  font-family: font-fzzj;
+//  src: url("/assets/font/fzzj-xss.ttf") format("ttf");
+//}
+
 * {
+  font-family: cursive;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -93,6 +99,14 @@ area {
   clear: both;
 }
 
+.color-red {
+  color: #ff0000;
+}
+
+.color-green {
+  color: #00ff00;
+}
+
 .duration-delete {
   //height: 0!important;
   overflow: hidden;
@@ -106,6 +120,10 @@ area {
 
 .text-left {
   text-align: left;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .progress {
