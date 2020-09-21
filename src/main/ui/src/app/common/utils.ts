@@ -1,6 +1,6 @@
 import {isArray, isDate, isFunction, isNullOrUndefined, isNumber, isObject, isString} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ElementRef} from '@angular/core';
+import {ElementRef, OnChanges, SimpleChanges} from '@angular/core';
 
 //<editor-fold desc="Define">
 //<editor-fold desc="Other">

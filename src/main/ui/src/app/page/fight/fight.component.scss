@@ -89,6 +89,17 @@
         margin-right: 3px;
       }
     }
+
+    .deduct {
+      top: 0;
+      right: 0;
+      color: #ea0000;
+      //transition: top .3s;
+
+      &.anim {
+        animation: anim-to-up 1s;
+      }
+    }
   }
 
   .chart {
@@ -116,7 +127,7 @@
         height: 3rem;
         background-position: center;
         background-size: cover;
-        background-image: url("/assets/fight/skill/unknow.png");
+        background-image: url("/assets/img/fight/skill/unknow.png");
         position: relative;
 
         .skill_wait {
@@ -188,14 +199,14 @@
   }
 
   .fight_info_box {
-    //border: 1px solid #aaa;
     bottom: 1rem;
     right: 1rem;
     width: 300px;
-    //height: 200px;
-    color: #aaa;
+    color: #ddd;
     font-size: 0.85rem;
-    //background: rgba(0,0,0,.3);
+    background: rgba(0, 0, 0, .2);
+    padding: .5rem;
+    line-height: 1.5rem;
 
     .player {
       color: #095084;

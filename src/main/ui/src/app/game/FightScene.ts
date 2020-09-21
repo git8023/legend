@@ -34,7 +34,9 @@ export interface FightEvent {
   // 计算中
   onLiquidation?: (isDone: boolean) => void;
   // 操作类型
-  onManual?: (isManual: boolean) => any;
+  onManual?: (isManual: boolean) => void;
+  // 产生/受到伤害
+  onHurt?: (role: GameRole, harm: number) => void;
 }
 
 // 战斗场景管理
@@ -54,6 +56,9 @@ export class FightScene {
   private nextEnemiesTimer: any;
   // 回合计数器
   roundCounter: number = 1;
+  // 伤害列表
+  hurtQueue: MessageQueue<{ player: Player, enemy: MasterRole }>
+    = new MessageQueue<{ player: Player, enemy: MasterRole }>(20);
 
   constructor(private gameMap: GameMap) {
     this.player = players.getCurrent();
@@ -94,7 +99,7 @@ export class FightScene {
   }
 
   // 执行普通攻击
-  private doNormalAttack(fromRole: GameRole, toRole: GameRole) {
+  private doNormalAttack(fromRole: GameRole, toRole: GameRole): number {
     if ((0 == fromRole.currentHP) || (0 == toRole.currentHP))
       return;
 
@@ -111,9 +116,12 @@ export class FightScene {
         extra: (0 == harm ? `${toRole.name}灵巧躲过攻击` : "")
       }
     });
+    execMethod(this.event.onHurt, this, [toRole, harm]);
 
     if (!toRole.currentHP)
       this.messageQueue.pull(Messages.dead(toRole));
+
+    return harm;
   }
 
   // 删除消息
@@ -257,6 +265,7 @@ export class FightScene {
         extra: (0 == harm ? `${defenseRole.name}灵巧躲过攻击` : "")
       }
     });
+    execMethod(this.event.onHurt, this, [this.enemy, harm]);
 
     if (!defenseRole.currentHP)
       this.messageQueue.pull(Messages.dead(defenseRole));
@@ -305,4 +314,5 @@ export class FightScene {
     if (!defenseRole.currentHP)
       this.messageQueue.pull(Messages.dead(defenseRole));
   }
+
 }

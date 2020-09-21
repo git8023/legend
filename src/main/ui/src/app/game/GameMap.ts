@@ -33,7 +33,7 @@ export interface GameMap {
   // 生成敌人
   generateEnemy?: () => MasterRole;
 
-  // 道具总爆率(n%)
+  // 道具总爆率(n%)/
   probability?: number
 }
 
@@ -46,7 +46,7 @@ let xingZiLin: GameMap = {
   enemies: [
     MasterRole.of({
       name: '毒蜘蛛',
-      pic: '/assets/fight/master/du_zhi_zhu.png',
+      pic: '/assets/img/fight/master/du_zhi_zhu.png',
       level: 1,
       maxHP: 10,
       maxMP: 5,
@@ -58,7 +58,7 @@ let xingZiLin: GameMap = {
     }),
     MasterRole.of({
       name: '野猪',
-      pic: '/assets/fight/master/wild_pig.png',
+      pic: '/assets/img/fight/master/wild_pig.png',
       level: 1,
       maxHP: 12,
       maxMP: 5,
@@ -70,7 +70,7 @@ let xingZiLin: GameMap = {
     }),
     MasterRole.ofBoss({
       name: '小陆龟',
-      pic: '/assets/fight/master/tortoise.png',
+      pic: '/assets/img/fight/master/tortoise.png',
       level: 2,
       maxHP: 15,
       maxMP: 1,
@@ -82,7 +82,7 @@ let xingZiLin: GameMap = {
     }),
     MasterRole.ofBoss({
       name: '小树妖',
-      pic: '/assets/fight/master/dryad.png',
+      pic: '/assets/img/fight/master/dryad.png',
       level: 2,
       maxHP: 15,
       maxMP: 1,
@@ -94,7 +94,7 @@ let xingZiLin: GameMap = {
     }),
     MasterRole.ofBoss({
       name: '野猪王',
-      pic: '/assets/fight/master/wild_pig_king.png',
+      pic: '/assets/img/fight/master/wild_pig_king.png',
       level: 5,
       maxHP: 35,
       maxMP: 10,

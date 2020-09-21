@@ -1,7 +1,7 @@
 <div class="main flex-h flex-center">
 
   <div class="relative font-size-0">
-    <img [src]="'/assets/fight/bg/'+gameMap.name+'.jpg'" alt="" class="relative position-origin">
+    <img [src]="'/assets/img/fight/bg/'+gameMap.name+'.jpg'" alt="" class="relative position-origin">
     <div class="absolute full-parent position-origin mask"></div>
 
     <!--主面板-->
@@ -10,11 +10,29 @@
       <!--我方-->
       <div class="players absolute">
         <div class="player">
-
           <div class="flex-h flex-center">
             <img [src]="player.pic" alt="" class="head_pic">
             <div class="flex-1 right-box">
-              <div class="name">{{player.name}} <span class="lv">Lv.{{player.level}}</span></div>
+              <div class="name relative">
+                {{player.name}}
+                <span class="lv">Lv.{{player.level}}</span>
+                <!--                <ng-container *ngFor="let data of harmInfo">-->
+                <!--                  <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data}"-->
+                <!--                       *ngIf="data && data.isPlayer"-->
+                <!--                       [onDeleted]="deleteDeduct"-->
+                <!--                       class="absolute deduct">-->
+                <!--                    -{{data.harm}}-->
+                <!--                  </div>-->
+                <!--                </ng-container>-->
+                <ng-container *ngFor="let data of harmInfo">
+                  <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data}"
+                       *ngIf="true"
+                       [onDeleted]="deleteDeduct"
+                       class="absolute deduct">
+                    -{{data.harm}}
+                  </div>
+                </ng-container>
+              </div>
               <div class="health points">
                 <div class="value" [ngStyle]="{width:player.currentHP/player.maxHP*100+'%'}"></div>
               </div>
@@ -23,7 +41,6 @@
               </div>
             </div>
           </div>
-
           <div class="buf">
             <img src="/assets/img/fight/stateIco/up_attack.jpg" alt="">
             <img src="/assets/img/fight/stateIco/buf_2.png" alt="">
@@ -137,7 +154,7 @@
       </div>
 
       <!--战斗信息-->
-      <div class="fight_info_box absolute overflow-auto" #fightInfoRef>
+      <div class="fight_info_box absolute overflow-auto">
         <div *ngFor="let msg of fightScene.messageQueue.queue"
              [durationDelete]="{data:msg}" [onDeleted]="onMessageDelete">
           <span *ngIf="1 == msg.type">

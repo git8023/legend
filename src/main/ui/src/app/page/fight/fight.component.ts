@@ -1,10 +1,11 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameMap, GameMaps} from '../../game/GameMap';
 import {GameRole} from '../../game/role/GameRole';
 import {FightScene} from '../../game/FightScene';
 import {Player} from '../../game/role/Player';
 import {isString} from 'util';
+import {removeA} from "../../common/utils";
 
 @Component({
   selector: 'app-fight',
@@ -12,8 +13,6 @@ import {isString} from 'util';
   styleUrls: ['./fight.component.scss']
 })
 export class FightComponent implements OnInit {
-  @ViewChild('fightInfoRef', {static: true}) fightInfoRef: ElementRef;
-
   gameMap: GameMap;
   player: Player;
   enemy: GameRole;
@@ -22,6 +21,8 @@ export class FightComponent implements OnInit {
   fightScene: FightScene;
   // 攻击中(一回合战斗未结束)
   isPause = false;
+  // 伤害信息
+  harmInfo: Array<{ harm: number; isPlayer: boolean; }> = [];
 
   // 战斗消息执行删除动画后
   onMessageDelete = (data) => {
@@ -44,7 +45,11 @@ export class FightComponent implements OnInit {
       // onRejuvenation: () => this.isPause = (this.player.maxHP != this.player.currentHP),
       // onLiquidation: (isDone) => this.isPause = !isDone,
       onFindEnemy: (enemies: GameRole[]) => this.enemy = enemies[0],
-      onManual: isManual => this.isPause = !isManual
+      onManual: isManual => this.isPause = !isManual,
+      onHurt: ({isPlayer}, harm) => {
+        if (isPlayer)
+          this.harmInfo.push({harm, isPlayer});
+      }
     });
     this.player = this.fightScene.player;
     this.fightScene.countdownNextEnemies();
@@ -69,5 +74,12 @@ export class FightComponent implements OnInit {
   // 玩家逃跑
   doEscape() {
     this.fightScene.playerEscape();
+  }
+
+  // 删除伤害信息
+  deleteDeduct = (info: any) => {
+    console.log(JSON.stringify(this.harmInfo))
+    removeA(this.harmInfo, info);
+    console.log(JSON.stringify(this.harmInfo))
   }
 }

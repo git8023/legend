@@ -195,13 +195,13 @@ export class Players {
   constructor() {
     this.current = Player.create({
       name: '七月',
-      pic: '/assets/fight/headPic/player-1.png',
+      pic: '/assets/img/fight/headPic/player-1.png',
       level: 1,
       maxHP: 20,
       maxMP: 15,
       speed: 5,
-      attackMin: 5,
-      attackMax: 25,
+      attackMin: 1,
+      attackMax: 5,
       defenseMin: 1,
       defenseMax: 3,
     });
