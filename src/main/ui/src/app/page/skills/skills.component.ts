@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Skill, SkillStore} from '../../game/skill/Skill';
+import {players} from '../../game/role/Player';
 
 @Component({
   selector: 'app-skills',
@@ -8,9 +9,10 @@ import {Skill, SkillStore} from '../../game/skill/Skill';
 })
 export class SkillsComponent implements OnInit {
 
-  store: Array<Skill> = SkillStore.skills;
+  store: Array<Skill>;
 
   constructor() {
+    this.store = players.getCurrent().getSkills();
   }
 
   ngOnInit() {

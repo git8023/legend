@@ -202,7 +202,7 @@ export class FightScene {
     execMethod(this.event.onLiquidation);
     execMethod(this.event.onManual, null, [false]);
 
-    this.messageQueue.pull(Messages.text('正在寻找敌人...'));
+    this.messageQueue.pull(Messages.waitEnemy('正在寻找敌人...'));
     let cd = 1;
     this.nextEnemiesTimer = setInterval(() => {
       if (cd-- <= 0) {
@@ -214,11 +214,10 @@ export class FightScene {
 
   // 下一波遇到的敌人
   nextEnemies() {
-    this.messageQueue.clear();
+    // this.messageQueue.clear();
     this.enemy = this.gameMap.generateEnemy();
     this.enemy.currentHP = this.enemy.maxHP;
     this.enemy.currentMP = this.enemy.maxMP;
-    // this.messageQueue.pull(Messages.text(`遇到 ${this.enemy.name}*1, 准备战斗!`));
     this.messageQueue.pull(Messages.encounterEnemy([this.enemy]));
     execMethod(this.event.onFindEnemy, null, [[this.enemy]]);
     this.fightStart();

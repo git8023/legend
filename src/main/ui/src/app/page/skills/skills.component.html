@@ -6,11 +6,16 @@
       <div class="detail flex-1">
         <div class="flex-h flex-children-avg">
           <span>{{skill.name}}</span>
-          <span>Lv.{{skill.lv}}</span>
+          <span>Up: Lv.{{skill.lv}}</span>
+          <span>等级 0/10</span>
         </div>
         <div class="flex-h flex-children-avg">
           <span>MP: {{skill.mp}}</span>
           <span>CD: {{skill.cd}}回合</span>
+          <div class="relative">
+            <div class="btn">配置</div>
+            <div class="btn">升级</div>
+          </div>
         </div>
       </div>
     </div>

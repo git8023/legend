@@ -16,17 +16,8 @@
               <div class="name relative">
                 {{player.name}}
                 <span class="lv">Lv.{{player.level}}</span>
-                <!--                <ng-container *ngFor="let data of harmInfo">-->
-                <!--                  <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data}"-->
-                <!--                       *ngIf="data && data.isPlayer"-->
-                <!--                       [onDeleted]="deleteDeduct"-->
-                <!--                       class="absolute deduct">-->
-                <!--                    -{{data.harm}}-->
-                <!--                  </div>-->
-                <!--                </ng-container>-->
-                <ng-container *ngFor="let data of harmInfo">
-                  <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data}"
-                       *ngIf="true"
+                <ng-container *ngFor="let data of playerHarmInfo">
+                  <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data, cacheKey:durationDeleteKeys.playerHarm}"
                        [onDeleted]="deleteDeduct"
                        class="absolute deduct">
                     -{{data.harm}}
@@ -53,7 +44,17 @@
         <div class="player" *ngIf="enemy">
           <div class="flex-h flex-center">
             <div class="flex-1 right-box">
-              <div class="name">{{enemy.name}} <span class="lv">Lv.{{enemy.level}}</span></div>
+              <div class="name">
+                {{enemy.name}} <span class="lv">Lv.{{enemy.level}}</span>
+
+                <div *ngFor="let data of enemyHarmInfo" class="deduct-box">
+                  <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data, cacheKey:durationDeleteKeys.playerHarm}"
+                       [onDeleted]="deleteDeduct"
+                       class="absolute deduct">
+                    -{{data.harm}}
+                  </div>
+                </div>
+              </div>
               <div class="health points">
                 <div class="value" [ngStyle]="{width:enemy.currentHP/enemy.maxHP*100+'%'}"></div>
               </div>

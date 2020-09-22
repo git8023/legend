@@ -11,10 +11,10 @@ import {isNullOrUndefined} from "util";
 export class DurationDeleteDirective implements OnInit {
 
   // 缓存数量
-  static currentCache = 0;
+  static currentCache = {};
 
   // 缓存控件列表
-  static caches: DurationDeleteDirective[] = [];
+  static caches: { [s: string]: DurationDeleteDirective[] } = {};
 
   // 默认配置
   readonly DEFAULT_CONFIG: DelayConfigure = {
@@ -43,19 +43,29 @@ export class DurationDeleteDirective implements OnInit {
   }
 
   ngOnInit(): void {
-    DurationDeleteDirective.caches.push(this);
-    let cacheLength = this.configure.cacheLength;
-    let maxCache = isNaN(cacheLength) ? this.DEFAULT_CONFIG.cacheLength : cacheLength;
-    if (++DurationDeleteDirective.currentCache > maxCache)
-      DurationDeleteDirective.caches.shift().doDelete();
-  }
-
-  // 执行删除命令
-  private doDelete() {
     // TODO 每个不同的业务使用不同的key防止相互干扰
     if (isNullOrUndefined(this.configure.cacheKey))
       this.configure.cacheKey = "undefined";
+    let cacheKey = this.configure.cacheKey;
+    if (!DurationDeleteDirective.currentCache[cacheKey])
+      DurationDeleteDirective.currentCache[cacheKey] = 0;
 
+    let store = DurationDeleteDirective.getStore(cacheKey);
+    store.push(this);
+    let cacheLength = this.configure.cacheLength;
+    let maxCache = isNaN(cacheLength) ? this.DEFAULT_CONFIG.cacheLength : cacheLength;
+    if (++DurationDeleteDirective.currentCache[cacheKey] > maxCache)
+      store.shift().doDelete();
+  }
+
+  // 获取仓库
+  private static getStore(cacheKey: string) {
+    let store = DurationDeleteDirective.caches[cacheKey];
+    return DurationDeleteDirective.caches[cacheKey] = store || [];
+  }
+
+// 执行删除命令
+  private doDelete() {
     setTimeout(() => {
       let dom = this.el.nativeElement;
       this.render.setStyle(dom, 'height', dom.clientHeight + 'px');
@@ -64,6 +74,7 @@ export class DurationDeleteDirective implements OnInit {
       let displayDuration = isNaN(this.configure.displayDuration)
         ? this.DEFAULT_CONFIG.displayDuration
         : this.configure.displayDuration;
+
       setTimeout(() => {
         if (this.configure.extraClass)
           this.render.addClass(dom, this.configure.extraClass);
@@ -73,7 +84,9 @@ export class DurationDeleteDirective implements OnInit {
 
         // 由组件数据驱动删除
         setTimeout(() => {
-          execMethod(this.onDeleted, null, this.configure.data);
+          execMethod(this.onDeleted, null, [this.configure.data]);
+          let cacheKey = this.configure.cacheKey;
+          --DurationDeleteDirective.currentCache[cacheKey]
         }, duration);
 
       }, displayDuration);

@@ -33,4 +33,22 @@
     //font-size: 0.7rem;
     padding: 0 .5rem .5rem;
   }
+
+  .btn {
+    display: inline-block;
+    background: linear-gradient(to bottom, #e06a38, #b3491e);
+    margin-right: .5rem;
+    color: #fff;
+    font-size: 1rem;
+    padding: .25rem;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);
+
+    &:active {
+      position: relative;
+      transform: scale(0.95);
+      background: linear-gradient(to bottom, #b3491e, #e06a38);
+      box-shadow: none;
+      outline: none;
+    }
+  }
 }

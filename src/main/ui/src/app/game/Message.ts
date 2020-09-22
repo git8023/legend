@@ -20,6 +20,9 @@ export enum MessageType {
 
   // 获得道具
   GATHER_GAME_PROP,
+
+  // 正在寻找怪物
+  WAIT_ENEMY
 }
 
 // 战斗数据消息
@@ -91,6 +94,11 @@ export class Messages {
   // 获取游戏道具
   static gatherGameProp(prop: GameProp): Message {
     return {type: MessageType.GATHER_GAME_PROP, data: {gameProp: prop}};
+  }
+
+  // 正在寻找敌人
+  static waitEnemy(msg: string): Message {
+    return {type: MessageType.WAIT_ENEMY, data: {extra: msg}};
   }
 }
 

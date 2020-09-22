@@ -5,7 +5,7 @@ import {GameRole} from '../../game/role/GameRole';
 import {FightScene} from '../../game/FightScene';
 import {Player} from '../../game/role/Player';
 import {isString} from 'util';
-import {removeA} from "../../common/utils";
+import {guid, removeA} from "../../common/utils";
 
 @Component({
   selector: 'app-fight',
@@ -22,7 +22,12 @@ export class FightComponent implements OnInit {
   // 攻击中(一回合战斗未结束)
   isPause = false;
   // 伤害信息
-  harmInfo: Array<{ harm: number; isPlayer: boolean; }> = [];
+  playerHarmInfo: Array<{ harm: number }> = [];
+  enemyHarmInfo: Array<{ harm: number }> = [];
+  // 延迟删除(key)
+  durationDeleteKeys = {
+    playerHarm: guid()
+  };
 
   // 战斗消息执行删除动画后
   onMessageDelete = (data) => {
@@ -48,7 +53,9 @@ export class FightComponent implements OnInit {
       onManual: isManual => this.isPause = !isManual,
       onHurt: ({isPlayer}, harm) => {
         if (isPlayer)
-          this.harmInfo.push({harm, isPlayer});
+          this.playerHarmInfo.push({harm});
+        else
+          this.enemyHarmInfo.push({harm});
       }
     });
     this.player = this.fightScene.player;
@@ -78,8 +85,7 @@ export class FightComponent implements OnInit {
 
   // 删除伤害信息
   deleteDeduct = (info: any) => {
-    console.log(JSON.stringify(this.harmInfo))
-    removeA(this.harmInfo, info);
-    console.log(JSON.stringify(this.harmInfo))
+    removeA(this.playerHarmInfo, info);
+    removeA(this.enemyHarmInfo, info);
   }
 }

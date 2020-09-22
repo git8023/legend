@@ -22,14 +22,14 @@ export class Skill {
 }
 
 // 技能库
-class SkillStore {
+export class SkillStore {
 
   // 定义所有技能
-  static store: { [lv: number]: Array<Skill> } = [];
-  public static skills: Array<Skill> = [];
+  store: { [lv: number]: Array<Skill> } = [];
+  skills: Array<Skill> = [];
 
   // 初始化
-  static init() {
+  init() {
     this.add({
       name: '二连刺',
       lv: 2,
@@ -64,7 +64,7 @@ class SkillStore {
       mp: 12,
       cd: 3,
       pic: '/assets/img/fight/skill/shan_dian_lian.bmp',
-      noteHtml: `发射出一道猛烈的闪电，并在附近的敌人身上不停的跳跃．每次跳跃损失 <span class="color-red">10%</span> 的攻击力.
+      noteHtml: `发射出一道猛烈的闪电，并在附近的敌人身上不停的跳跃．每次跳跃损失<span class="color-red">10%</span>的攻击力.
                 <div>
                   <div>跳跃次数: <span class="color-red">3</span></div>
                 </div>`
@@ -75,7 +75,7 @@ class SkillStore {
   }
 
   // 添加技能库
-  private static add(skill: Skill): SkillStore {
+  private add(skill: Skill): SkillStore {
     this.skills.push(skill);
     let old = this.store[skill.lv];
     if (!old) this.store[skill.lv] = old = [];
@@ -84,5 +84,5 @@ class SkillStore {
   }
 }
 
-SkillStore.init();
-export {SkillStore}
+// SkillStore.init();
+// export {SkillStore}
