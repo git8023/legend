@@ -1,6 +1,7 @@
 // 消息类型
 import {GameRole} from './role/GameRole';
 import {GameProp} from './gameProp/GameProp';
+import {Skill} from './skill/Skill';
 
 export enum MessageType {
   // 普通文本消息

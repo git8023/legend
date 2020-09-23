@@ -88,4 +88,10 @@ export class FightComponent implements OnInit {
     removeA(this.playerHarmInfo, info);
     removeA(this.enemyHarmInfo, info);
   }
+
+  // 玩家使用技能
+  useSkill(key: string) {
+    if (this.player.skillStore.validShortcut(key))
+      this.fightScene.playerUseSkill(key);
+  }
 }

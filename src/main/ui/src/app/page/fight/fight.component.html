@@ -33,8 +33,7 @@
             </div>
           </div>
           <div class="buf">
-            <img src="/assets/img/fight/stateIco/up_attack.jpg" alt="">
-            <img src="/assets/img/fight/stateIco/buf_2.png" alt="">
+            <img *ngFor="let skill of fightScene.buffSkills" [src]="skill.pic" alt="">
           </div>
         </div>
       </div>
@@ -95,22 +94,22 @@
               <div class="skill_wait" [skill-wait]="isPause"></div>
             </div>
             <div class="skill-list flex-h">
-              <div class="skill box flex-1">
+              <div class="skill box flex-1" [ngStyle]="{'background-image':player.skillStore.getSkillPic('Q')}" (click)="useSkill('Q')">
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
-              <div class="skill box flex-1">
+              <div class="skill box flex-1" [ngStyle]="{'background-image':player.skillStore.getSkillPic('w')}" (click)="useSkill('w')">
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
-              <div class="skill box flex-1">
+              <div class="skill box flex-1" [ngStyle]="{'background-image':player.skillStore.getSkillPic('E')}" (click)="useSkill('E')">
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
-              <div class="skill box flex-1">
+              <div class="skill box flex-1" [ngStyle]="{'background-image':player.skillStore.getSkillPic('R')}" (click)="useSkill('R')">
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
-              <div class="skill box flex-1">
+              <div class="skill box flex-1" [ngStyle]="{'background-image':player.skillStore.getSkillPic('T')}" (click)="useSkill('T')">
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
-              <div class="skill box flex-1">
+              <div class="skill box flex-1" [ngStyle]="{'background-image':player.skillStore.getSkillPic('Y')}" (click)="useSkill('Y')">
                 <div class="skill_wait" [skill-wait]="isPause"></div>
               </div>
             </div>
@@ -120,6 +119,9 @@
             </div>
           </div>
           <div>
+            <div class="attack box" (click)="normalAttack()">
+              AUTO
+            </div>
             <div class="prop-list flex-h">
               <div class="prop box flex-1">
                 <div class="skill_wait" [skill-wait]="isPause"></div>

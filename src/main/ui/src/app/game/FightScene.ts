@@ -1,4 +1,4 @@
-import {execMethod, MessageQueue, rand} from "../common/utils";
+import {eachA, execMethod, MessageQueue, rand} from "../common/utils";
 import {Message, Messages, MessageType} from "./Message";
 import {GameRole} from './role/GameRole';
 import {GameMap} from './GameMap';
@@ -6,6 +6,7 @@ import {Player, players} from './role/Player';
 import {GameProp} from './gameProp/GameProp';
 import {GamePropManager} from './gameProp/GamePropManager';
 import {MasterRole} from './role/MasterRole';
+import {Skill} from './skill/Skill';
 
 // 战斗状态
 export enum FightStatus {
@@ -49,16 +50,15 @@ export class FightScene {
   // 敌人
   enemy: MasterRole;
   // 场景消息队列
-  messageQueue: MessageQueue<Message> = new MessageQueue<Message>(20);
+  messageQueue: MessageQueue<Message> = new MessageQueue<Message>(10);
   // 战斗事件
   event: FightEvent = {};
   // 寻找敌人计时器
   private nextEnemiesTimer: any;
   // 回合计数器
   roundCounter: number = 1;
-  // 伤害列表
-  hurtQueue: MessageQueue<{ player: Player, enemy: MasterRole }>
-    = new MessageQueue<{ player: Player, enemy: MasterRole }>(20);
+  // Buff列表
+  buffSkills: Array<Skill> = [];
 
   constructor(private gameMap: GameMap) {
     this.player = players.getCurrent();
@@ -99,14 +99,23 @@ export class FightScene {
   }
 
   // 执行普通攻击
-  private doNormalAttack(fromRole: GameRole, toRole: GameRole): number {
+  private doNormalAttack(fromRole: GameRole, toRole: GameRole) {
     if ((0 == fromRole.currentHP) || (0 == toRole.currentHP))
       return;
 
     let fromRoleAttack = rand(fromRole.attackMin, fromRole.attackMax);
     let toRoleDefense = rand(toRole.defenseMin, toRole.defenseMax);
     let harm = Math.max(fromRoleAttack - toRoleDefense, 0);
+    this.onHurt(fromRole, toRole, harm);
+
+    if (!toRole.currentHP)
+      this.messageQueue.pull(Messages.dead(toRole));
+  }
+
+  // 收到伤害
+  onHurt(fromRole: GameRole, toRole: GameRole, harm: number) {
     toRole.currentHP = Math.max(toRole.currentHP - harm, 0);
+
     this.messageQueue.pull({
       type: MessageType.ATTACKER,
       data: {
@@ -117,11 +126,6 @@ export class FightScene {
       }
     });
     execMethod(this.event.onHurt, this, [toRole, harm]);
-
-    if (!toRole.currentHP)
-      this.messageQueue.pull(Messages.dead(toRole));
-
-    return harm;
   }
 
   // 删除消息
@@ -141,11 +145,10 @@ export class FightScene {
 
       // 敌人失败
       else if (FightScene.isDead(this.enemy)) {
-        this.messageQueue.pull(Messages.text('战斗胜利, ^o^Y!'));
+        this.messageQueue.pull(Messages.text('战斗胜利!'));
         execMethod(this.event.onLiquidation, null, [false]);
         this.liquidation();
         this.countdownNextEnemies();
-
       }
 
       // 继续下个回合
@@ -254,17 +257,7 @@ export class FightScene {
 
     let fromRoleAttack = rand(attackRole.attackMin, attackRole.attackMax);
     let harm = Math.max(fromRoleAttack - defenseRole.defenseMax, 0);
-    defenseRole.currentHP = Math.max(defenseRole.currentHP - harm, 0);
-    this.messageQueue.pull({
-      type: MessageType.ATTACKER,
-      data: {
-        fromRole: attackRole,
-        toRole: defenseRole,
-        harm: harm,
-        extra: (0 == harm ? `${defenseRole.name}灵巧躲过攻击` : "")
-      }
-    });
-    execMethod(this.event.onHurt, this, [this.enemy, harm]);
+    this.onHurt(attackRole, defenseRole, harm);
 
     if (!defenseRole.currentHP)
       this.messageQueue.pull(Messages.dead(defenseRole));
@@ -314,4 +307,34 @@ export class FightScene {
       this.messageQueue.pull(Messages.dead(defenseRole));
   }
 
+  // 玩家使用技能
+  playerUseSkill(key: string) {
+    execMethod(this.event.onRoundStart, this);
+    execMethod(this.event.onManual, null, [false]);
+
+    let skill = this.player.skillStore.shortcut[key];
+    skill.use(this);
+    eachA(this.getEnemies(), e => this.doNormalAttack(e, this.player));
+    this.fightOver();
+  }
+
+  // 获取所有敌人
+  getEnemies() {
+    return [this.enemy];
+  }
+
+  // 获取角色防御值
+  getDefense(role: GameRole): number {
+    return rand(role.defenseMin, role.defenseMax + 1);
+  }
+
+  // 收到消息
+  onMessage(msg: Message) {
+    this.messageQueue.pull(msg);
+  }
+
+  // 增加Buff
+  addBuff(skill: Skill) {
+    this.buffSkills.push(skill);
+  }
 }

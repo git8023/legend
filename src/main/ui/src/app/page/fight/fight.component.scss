@@ -150,6 +150,63 @@
           height: 100%;
           opacity: 0.2;
         }
+
+        &:before {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          color: #fff;
+          font-size: 1rem;
+        }
+
+        &.skill:nth-child(1):before {
+          content: 'Q';
+        }
+
+        &.skill:nth-child(2):before {
+          content: 'W';
+        }
+
+        &.skill:nth-child(3):before {
+          content: 'E';
+        }
+
+        &.skill:nth-child(4):before {
+          content: 'R';
+        }
+
+        &.skill:nth-child(5):before {
+          content: 'T';
+        }
+
+        &.skill:nth-child(6):before {
+          content: 'Y';
+        }
+
+        &.prop:nth-child(1):before {
+          content: '1';
+        }
+
+        &.prop:nth-child(2):before {
+          content: '2';
+        }
+
+        &.prop:nth-child(3):before {
+          content: '3';
+        }
+
+        &.prop:nth-child(4):before {
+          content: '4';
+        }
+
+        &.prop:nth-child(5):before {
+          content: '5';
+        }
+
+        &.prop:nth-child(6):before {
+          content: '6';
+        }
       }
 
       .attack, .defense, .escape {

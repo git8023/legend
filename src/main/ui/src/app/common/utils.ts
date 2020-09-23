@@ -1,6 +1,6 @@
 import {isArray, isDate, isFunction, isNullOrUndefined, isNumber, isObject, isString} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ElementRef, OnChanges, SimpleChanges} from '@angular/core';
+import {ElementRef} from '@angular/core';
 
 //<editor-fold desc="Define">
 //<editor-fold desc="Other">
@@ -105,11 +105,11 @@ export function execMethod(fn: Function, _this?: any, args?: any[]) {
 
 /**
  * 范围内随机数
- * @param min 最小值
- * @param max 最大值
+ * @param min 最小值(包括)
+ * @param max 最大值(不包括)
  */
 export function rand(min: number, max: number): number {
-  return parseInt(Math.random() * (max - min) + '') + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function G() {

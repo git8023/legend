@@ -40,6 +40,13 @@
   justify-content: center;
 }
 
+.flex-before-1:before,
+.flex-after-1:after,
+{
+  content: ' ';
+  flex: 1;
+}
+
 .margin-center {
   margin-left: auto;
   margin-right: auto;
@@ -134,6 +141,14 @@ area {
   }
 }
 
+.disable {
+  pointer-events: none;
+
+  &.btn {
+    background: #999 !important;
+    color: #eee !important;
+  }
+}
 
 //<editor-fold desc="动画">
 // 向上移动动画

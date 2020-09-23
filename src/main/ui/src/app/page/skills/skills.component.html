@@ -1,25 +1,51 @@
-<div class="skills margin-center">
+<div class="flex-h flex-before-1 flex-after-1">
+  <div class="flex-1"></div>
 
-  <div class="skill" *ngFor="let skill of store">
-    <div class="flex-h flex-center">
-      <img [src]="skill.pic" alt="" class="icon">
-      <div class="detail flex-1">
-        <div class="flex-h flex-children-avg">
-          <span>{{skill.name}}</span>
-          <span>Up: Lv.{{skill.lv}}</span>
-          <span>等级 0/10</span>
-        </div>
-        <div class="flex-h flex-children-avg">
-          <span>MP: {{skill.mp}}</span>
-          <span>CD: {{skill.cd}}回合</span>
-          <div class="relative">
-            <div class="btn">配置</div>
-            <div class="btn">升级</div>
+  <div class="skills margin-center">
+    <div class="">
+      可用点数: {{skillStore.points}}
+    </div>
+    <div>
+      <div class="skill" *ngFor="let skill of skillStore.skills">
+        <div class="flex-h flex-center">
+          <div class="relative icon-box">
+            <img [src]="skill.pic" alt="" class="icon">
+            <div class="absolute shortcut">{{skill.shortcut}}</div>
+          </div>
+          <div class="detail flex-1">
+            <div class="flex-h flex-children-avg">
+              <span>{{skill.name}}</span>
+              <span>Up: Lv.{{skill.lv}}</span>
+              <span>等级 {{skill.upTimes}}/{{skill.maxUpTimes}}</span>
+            </div>
+            <div class="flex-h flex-children-avg">
+              <span>MP: {{skill.mp}}</span>
+              <span>CD: {{skill.cd}}回合</span>
+              <div class="relative">
+                <div class="btn" [class.disable]="0==skill.upTimes" (click)="showCfg(skill)">配置</div>
+                <div class="btn"
+                     [class.disable]="skill.upTimes>=skill.maxUpTimes || !skillStore.points || isShowCfgBlock"
+                     (click)="upSkill(skill)">
+                  升级
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="note" [innerHTML]="skill.noteHtml"></div>
+        <div class="wait" *ngIf="isShowCfgBlock" [skill-wait]="cfgSkill!=skill"></div>
       </div>
     </div>
-    <div class="note" [innerHTML]="skill.noteHtml"></div>
+  </div>
+  <div class="skill-cfg-container" *ngIf="isShowCfgBlock">
+    <div class="skill-cfg-box" (click)="setShortcut('Q')" [ngStyle]="{'background-image':getSkillPic('Q')}"></div>
+    <div class="skill-cfg-box" (click)="setShortcut('w')" [ngStyle]="{'background-image':getSkillPic('w')}"></div>
+    <div class="skill-cfg-box" (click)="setShortcut('E')" [ngStyle]="{'background-image':getSkillPic('E')}"></div>
+    <div class="skill-cfg-box" (click)="setShortcut('R')" [ngStyle]="{'background-image':getSkillPic('R')}"></div>
+    <div class="skill-cfg-box" (click)="setShortcut('T')" [ngStyle]="{'background-image':getSkillPic('T')}"></div>
+    <div class="skill-cfg-box" (click)="setShortcut('Y')" [ngStyle]="{'background-image':getSkillPic('Y')}"></div>
   </div>
 
+  <div class="flex-1"></div>
 </div>
+

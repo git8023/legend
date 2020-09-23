@@ -9,17 +9,29 @@
   margin-top: 1rem;
   border-radius: .3rem;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, .5);
+  position: relative;
 
   &:first-child {
     margin-top: 0;
   }
 
-  .icon {
-    width: 3rem;
-    height: 3rem;
+  .icon-box {
     margin: .5rem;
-    border-radius: .5rem;
-    border: 1px solid #f00;
+
+    .icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: .5rem;
+      border: 1px solid #f00;
+    }
+
+    .shortcut {
+      top: 0;
+      left: 0;
+      color: #ffac00;
+      line-height: 0;
+      font-size: 1rem;
+    }
   }
 
   .detail {
@@ -49,6 +61,67 @@
       background: linear-gradient(to bottom, #b3491e, #e06a38);
       box-shadow: none;
       outline: none;
+    }
+  }
+}
+
+.wait {
+  background: #000;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+}
+
+.skill-cfg-container {
+  margin-left: 1rem;
+  white-space: nowrap;
+
+  .skill-cfg-box {
+    border: 1px solid #fff;
+    background-image: url("/assets/img/fight/skill/unknow.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 32px;
+    height: 32px;
+    position: relative;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    &:before {
+      position: absolute;
+      top: .5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffac00;
+      font-size: 1rem;
+    }
+
+
+    &:nth-child(1):before {
+      content: 'Q';
+    }
+
+    &:nth-child(2):before {
+      content: 'W';
+    }
+
+    &:nth-child(3):before {
+      content: 'E';
+    }
+
+    &:nth-child(4):before {
+      content: 'R';
+    }
+
+    &:nth-child(5):before {
+      content: 'T';
+    }
+
+    &:nth-child(6):before {
+      content: 'Y';
     }
   }
 }

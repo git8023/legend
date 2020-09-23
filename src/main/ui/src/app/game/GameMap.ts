@@ -108,10 +108,10 @@ let xingZiLin: GameMap = {
   equipments: EquipmentStore.create([
     {
       name: '绯红铠甲',
-      pic: '/assets/equip/armour/02_01.png',
+      pic: '/assets/img/equip/armour/02_01.png',
       note: '绯红宝石镶嵌的铠甲, 有着不菲防御',
       lv: 2,
-      probability: 0.1,
+      probability: 0.05,
       defenseMin: 1,
       defenseMax: 2,
       type: EquipmentType.ARMOUR

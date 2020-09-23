@@ -1,8 +1,8 @@
 import {GameRole} from './GameRole';
-import {clone, eachA, eachO} from '../../common/utils';
+import {eachA, eachO} from '../../common/utils';
 import {Bag} from '../Bag';
-import {Equipment, EquipmentType} from "../gameProp/Equipment";
-import {Skill, SkillStore} from '../skill/Skill';
+import {Equipment} from "../gameProp/Equipment";
+import {SkillStore} from '../skill/Skill';
 
 // 等级经验
 class LevelExp {
@@ -86,7 +86,7 @@ export class Player extends GameRole {
   exp: LevelExp;
   bag: Bag;
   equipments: PlayerEquipments;
-  skills: Array<Skill>;
+  skillStore: SkillStore;
 
   // 创建玩家数据
   static create(role: GameRole): Player {
@@ -99,7 +99,7 @@ export class Player extends GameRole {
     player.bag = new Bag(player);
     player.equipments = new PlayerEquipments(player);
     player.exp = LevelExp.create(player);
-    player.skills = clone(SkillStore.skills);
+    player.skillStore = new SkillStore(player);
     return player;
   }
 
@@ -122,11 +122,8 @@ export class Player extends GameRole {
 
     this.currentHP = this.maxHP;
     this.currentMP = this.maxMP;
-  }
 
-  // 获取玩家技能
-  getSkills(): Array<Skill> {
-    return this.skills;
+    this.skillStore.points++;
   }
 }
 
@@ -208,8 +205,8 @@ export class Players {
       maxHP: 20,
       maxMP: 15,
       speed: 5,
-      attackMin: 1,
-      attackMax: 3,
+      attackMin: 0,
+      attackMax: 10,
       defenseMin: 1,
       defenseMax: 3,
     });
