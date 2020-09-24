@@ -205,9 +205,9 @@ export class Players {
       maxHP: 20,
       maxMP: 15,
       speed: 5,
-      attackMin: 0,
-      attackMax: 10,
-      defenseMin: 1,
+      attackMin: 1,
+      attackMax: 7,
+      defenseMin: 0,
       defenseMax: 3,
     });
   }

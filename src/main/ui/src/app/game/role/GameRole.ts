@@ -27,6 +27,7 @@ export class GameRole {
   defenseMin: number;
   // 最大防御
   defenseMax: number;
+  static isLife = (role: GameRole) => role.currentHP > 0;
 
   constructor(
     name: string,

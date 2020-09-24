@@ -1,6 +1,5 @@
 // 技能
 import {eachO, randA} from '../../common/utils';
-import {MasterRole} from '../role/MasterRole';
 import {Player} from '../role/Player';
 import {FightScene} from '../FightScene';
 import {Messages} from '../Message';
@@ -57,7 +56,7 @@ export class SkillStore {
 
   // 初始化
   constructor(private player: Player) {
-    this.points = 5;
+    this.points = 0;
     this.add({
       name: '二连刺',
       lv: 2,
@@ -96,7 +95,7 @@ export class SkillStore {
         this.extra.attackAddtion = cfg.attackAddtion;
         this.mp = cfg.mp;
       },
-      use(fs: FightScene) {
+      use(fs) {
         if (this.mp > player.currentMP) {
           fs.onMessage(Messages.text(`${player.name} 魔法值不足, 技能 [${this.name}] 发动失败!`))
           return;
@@ -130,7 +129,7 @@ export class SkillStore {
       get noteHtml() {
         return `伟大的<span class="color-green">肯尼迪大魔法师</span>赐予霜冻结界覆盖全身铠甲, 极大提高铠甲防御.
                   <div>
-                    <div>Buff <span class="color-red">1回合</span></div>
+                    <div>Buff <span class="color-red">${this.extra.keep}回合</span></div>
                     <div>护甲 <span class="color-red"> +${this.extra.defenseMax}</span></div>
                   </div>`
       },
@@ -139,8 +138,10 @@ export class SkillStore {
           this.extra.defenseMax = Math.ceil((this.extra.defenseMax || 3) * 1.2);
         this.upTimes++;
       },
-      use(fs: FightScene) {
-        fs.addBuff(this);
+      use(fs) {
+        fs.addBuff(this, this.extra.keep);
+        fs.onMessage(Messages.text(`${player.name} 使用技能 [${this.name}]:
+                                    护甲+${this.extra.defenseMax}, 持续${this.extra.keep}回合`));
       }
     });
     this.add({
@@ -165,7 +166,7 @@ export class SkillStore {
         }
         this.upTimes++;
       },
-      use() {
+      use(fs) {
 
       }
     });

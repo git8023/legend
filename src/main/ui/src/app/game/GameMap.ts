@@ -48,11 +48,11 @@ let xingZiLin: GameMap = {
       name: '毒蜘蛛',
       pic: '/assets/img/fight/master/du_zhi_zhu.png',
       level: 1,
-      maxHP: 20,
+      maxHP: 10,
       maxMP: 5,
       speed: 3,
-      attackMin: 1,
-      attackMax: 3,
+      attackMin: 0,
+      attackMax: 1,
       defenseMin: 0,
       defenseMax: 1,
     }),
@@ -60,37 +60,37 @@ let xingZiLin: GameMap = {
       name: '野猪',
       pic: '/assets/img/fight/master/wild_pig.png',
       level: 1,
-      maxHP: 20,
+      maxHP: 12,
       maxMP: 5,
       speed: 1,
-      attackMin: 1,
+      attackMin: 0,
       attackMax: 2,
       defenseMin: 0,
-      defenseMax: 1,
+      defenseMax: 2,
     }),
-    MasterRole.ofBoss({
+    MasterRole.of({
       name: '小陆龟',
       pic: '/assets/img/fight/master/tortoise.png',
       level: 2,
       maxHP: 15,
       maxMP: 1,
       speed: 0,
-      attackMin: 1,
+      attackMin: 0,
       attackMax: 3,
-      defenseMin: 2,
-      defenseMax: 5
+      defenseMin: 0,
+      defenseMax: 3
     }),
-    MasterRole.ofBoss({
+    MasterRole.of({
       name: '小树妖',
       pic: '/assets/img/fight/master/dryad.png',
       level: 2,
-      maxHP: 15,
+      maxHP: 17,
       maxMP: 1,
       speed: 2,
       attackMin: 1,
-      attackMax: 5,
+      attackMax: 2,
       defenseMin: 1,
-      defenseMax: 3
+      defenseMax: 2
     }),
     MasterRole.ofBoss({
       name: '野猪王',
@@ -99,10 +99,10 @@ let xingZiLin: GameMap = {
       maxHP: 35,
       maxMP: 10,
       speed: 5,
-      attackMin: 3,
-      attackMax: 7,
-      defenseMin: 2,
-      defenseMax: 5
+      attackMin: 1,
+      attackMax: 5,
+      defenseMin: 1,
+      defenseMax: 3
     }),
   ],
   equipments: EquipmentStore.create([
@@ -118,15 +118,15 @@ let xingZiLin: GameMap = {
     }
   ]),
   bossRate: 10 / 100,
-  probability: 1,
+  probability: 0.25,
   generateEnemy: function () {
     while (true) {
       let master = randA<MasterRole>(this.enemies);
       if (!master.isBoss)
-        return master;
+        return MasterRole.of(master);
 
       if (Math.random() <= this.bossRate)
-        return master;
+        return MasterRole.ofBoss(master);
     }
   }
 };

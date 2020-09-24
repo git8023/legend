@@ -25,8 +25,7 @@
 
     .deduct-box {
       position: absolute;
-      top: 0.5rem;
-      left: 1rem;
+      top: 0;
 
       .deduct {
         left: 0;
@@ -38,6 +37,11 @@
   .player {
     margin-bottom: 1rem;
     background: rgb(149, 129, 18, .3);
+    position: relative;
+
+    .name {
+      position: relative;
+    }
 
     > * {
       padding: 5px;
@@ -140,16 +144,6 @@
         background-size: cover;
         background-image: url("/assets/img/fight/skill/unknow.png");
         position: relative;
-
-        .skill_wait {
-          background: #000;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          opacity: 0.2;
-        }
 
         &:before {
           position: absolute;
@@ -309,4 +303,14 @@
       font-size: 2rem;
     }
   }
+}
+
+.skill_wait {
+  background: #000;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
 }

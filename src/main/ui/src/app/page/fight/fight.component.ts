@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameMap, GameMaps} from '../../game/GameMap';
 import {GameRole} from '../../game/role/GameRole';
@@ -6,6 +6,8 @@ import {FightScene} from '../../game/FightScene';
 import {Player} from '../../game/role/Player';
 import {isString} from 'util';
 import {guid, removeA} from "../../common/utils";
+import {Skill} from '../../game/skill/Skill';
+import {MasterRole} from '../../game/role/MasterRole';
 
 @Component({
   selector: 'app-fight',
@@ -15,7 +17,7 @@ import {guid, removeA} from "../../common/utils";
 export class FightComponent implements OnInit {
   gameMap: GameMap;
   player: Player;
-  enemy: GameRole;
+  enemies: MasterRole[] = [];
 
   // 战斗场景
   fightScene: FightScene;
@@ -23,7 +25,7 @@ export class FightComponent implements OnInit {
   isPause = false;
   // 伤害信息
   playerHarmInfo: Array<{ harm: number }> = [];
-  enemyHarmInfo: Array<{ harm: number }> = [];
+  enemyHarmInfo: Array<{ harm: number, role: MasterRole }> = [];
   // 延迟删除(key)
   durationDeleteKeys = {
     playerHarm: guid()
@@ -33,6 +35,12 @@ export class FightComponent implements OnInit {
   onMessageDelete = (data) => {
     this.fightScene.deleteMessage(data);
   };
+
+  // 自动攻击(挂机)
+  private isAuto: boolean = false;
+
+  // 下回合强制自动攻击
+  private nextRoundAuto: boolean = false;
 
   constructor(private route: ActivatedRoute) {
   }
@@ -46,16 +54,30 @@ export class FightComponent implements OnInit {
     this.fightScene.fightEvent({
       // onStart: () => this.isPause = false,
       // onRoundStart: () => this.isPause = false,
-      // onRoundOver: () => this.isPause = false,
+      // onRoundOver: () => {
+      //   if (this.nextRoundAuto) {
+      //     this.nextRoundAuto = false;
+      //     this.autoHandle();
+      //   }
+      // },
       // onRejuvenation: () => this.isPause = (this.player.maxHP != this.player.currentHP),
-      // onLiquidation: (isDone) => this.isPause = !isDone,
-      onFindEnemy: (enemies: GameRole[]) => this.enemy = enemies[0],
-      onManual: isManual => this.isPause = !isManual,
-      onHurt: ({isPlayer}, harm) => {
-        if (isPlayer)
+      onLiquidation: (isDone) => {
+        // if (isDone && this.nextRoundAuto) {
+        //   this.nextRoundAuto = false;
+        //   this.autoHandle();
+        // }
+      },
+      onFindEnemy: (enemies: GameRole[]) => this.enemies = enemies,
+      onManual: isManual => {
+        this.isPause = (!isManual || this.isAuto);
+        if (isManual && (this.nextRoundAuto || this.isAuto))
+          this.autoHandle();
+      },
+      onHurt: (role, harm) => {
+        if (role.isPlayer)
           this.playerHarmInfo.push({harm});
         else
-          this.enemyHarmInfo.push({harm});
+          this.enemyHarmInfo.push({harm, role});
       }
     });
     this.player = this.fightScene.player;
@@ -93,5 +115,24 @@ export class FightComponent implements OnInit {
   useSkill(key: string) {
     if (this.player.skillStore.validShortcut(key))
       this.fightScene.playerUseSkill(key);
+  }
+
+  // 获取buff技能列表
+  getBufSkills(): Array<Skill> {
+    let sks: Array<Skill> = [];
+    for (const sk of this.fightScene.buffSkills.keys())
+      sks.push(sk);
+    return sks;
+  }
+
+  // 自动攻击(挂机)
+  swapAutoAttack() {
+    this.isAuto = !this.isAuto;
+    this.nextRoundAuto = true;
+  }
+
+  // 挂机
+  private autoHandle() {
+    this.normalAttack();
   }
 }

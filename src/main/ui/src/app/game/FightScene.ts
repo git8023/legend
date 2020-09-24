@@ -1,4 +1,4 @@
-import {eachA, execMethod, MessageQueue, rand} from "../common/utils";
+import {eachA, execMethod, MessageQueue, rand, randA} from "../common/utils";
 import {Message, Messages, MessageType} from "./Message";
 import {GameRole} from './role/GameRole';
 import {GameMap} from './GameMap';
@@ -32,7 +32,7 @@ export interface FightEvent {
   onRejuvenation?: () => void;
   // 正在寻找敌人
   onFindEnemy?: (enemies: GameRole[]) => void;
-  // 计算中
+  // 结算中
   onLiquidation?: (isDone: boolean) => void;
   // 操作类型
   onManual?: (isManual: boolean) => void;
@@ -48,9 +48,10 @@ export class FightScene {
   // 当前玩家
   player: Player;
   // 敌人
-  enemy: MasterRole;
+  // enemy: MasterRole;
+  enemies: MasterRole[];
   // 场景消息队列
-  messageQueue: MessageQueue<Message> = new MessageQueue<Message>(10);
+  messageQueue: MessageQueue<Message> = new MessageQueue<Message>(5);
   // 战斗事件
   event: FightEvent = {};
   // 寻找敌人计时器
@@ -58,7 +59,7 @@ export class FightScene {
   // 回合计数器
   roundCounter: number = 1;
   // Buff列表
-  buffSkills: Array<Skill> = [];
+  buffSkills: Map<Skill, number> = new Map<Skill, number>();
 
   constructor(private gameMap: GameMap) {
     this.player = players.getCurrent();
@@ -76,14 +77,18 @@ export class FightScene {
   normalAttack() {
     execMethod(this.event.onRoundStart, this);
     execMethod(this.event.onManual, null, [false]);
+    let enemy = randA(this.enemies.filter(GameRole.isLife));
 
     // 计算出手速度
-    if (this.player.speed >= this.enemy.speed) {
+    if (this.player.speed >= enemy.speed) {
       // 玩家普通攻击
-      this.doNormalAttack(this.player, this.enemy);
+      this.doNormalAttack(this.player, enemy);
       // 敌人攻击
       setTimeout(() => {
-        this.doNormalAttack(this.enemy, this.player);
+        eachA(
+          this.enemies.filter(GameRole.isLife),
+          enemy => this.doNormalAttack(enemy, this.player)
+        );
         this.fightOver();
       }, 500);
       return;
@@ -91,11 +96,11 @@ export class FightScene {
 
     // 玩家普通攻击
     setTimeout(() => {
-      this.doNormalAttack(this.player, this.enemy);
+      this.doNormalAttack(this.player, enemy);
       this.fightOver();
     }, 500);
     // 敌人攻击
-    this.doNormalAttack(this.enemy, this.player);
+    eachA(this.enemies, enemy => this.doNormalAttack(enemy, this.player));
   }
 
   // 执行普通攻击
@@ -104,7 +109,7 @@ export class FightScene {
       return;
 
     let fromRoleAttack = rand(fromRole.attackMin, fromRole.attackMax);
-    let toRoleDefense = rand(toRole.defenseMin, toRole.defenseMax);
+    let toRoleDefense = this.getDefense(toRole);
     let harm = Math.max(fromRoleAttack - toRoleDefense, 0);
     this.onHurt(fromRole, toRole, harm);
 
@@ -144,7 +149,7 @@ export class FightScene {
       }
 
       // 敌人失败
-      else if (FightScene.isDead(this.enemy)) {
+      else if (FightScene.isDead(...this.enemies)) {
         this.messageQueue.pull(Messages.text('战斗胜利!'));
         execMethod(this.event.onLiquidation, null, [false]);
         this.liquidation();
@@ -160,8 +165,11 @@ export class FightScene {
   }
 
   // 判断角色是否死亡
-  private static isDead(role: GameRole) {
-    return 0 == role.currentHP;
+  private static isDead(...roles: GameRole[]) {
+    for (let i in roles)
+      if (0 < roles[i].currentHP)
+        return false;
+    return true;
   }
 
   // 战斗开始
@@ -186,10 +194,13 @@ export class FightScene {
       return;
     }
 
-    let avg = this.player.maxHP / 10;
+    let avgHp = this.player.maxHP / 10;
+    let avgMp = this.player.maxMP / 10;
     setTimeout(() => {
-      let hp = this.player.currentHP + avg;
+      let hp = this.player.currentHP + avgHp;
+      let mp = this.player.currentMP + avgMp;
       this.player.currentHP = Math.min(hp, this.player.maxHP);
+      this.player.currentMP = Math.min(mp, this.player.maxMP);
       execMethod(this.event.onRejuvenation);
 
       if (hp < this.player.maxHP) {
@@ -202,7 +213,6 @@ export class FightScene {
 
   // 倒计时寻找下个敌人
   countdownNextEnemies() {
-    execMethod(this.event.onLiquidation);
     execMethod(this.event.onManual, null, [false]);
 
     this.messageQueue.pull(Messages.waitEnemy('正在寻找敌人...'));
@@ -217,34 +227,57 @@ export class FightScene {
 
   // 下一波遇到的敌人
   nextEnemies() {
-    // this.messageQueue.clear();
-    this.enemy = this.gameMap.generateEnemy();
-    this.enemy.currentHP = this.enemy.maxHP;
-    this.enemy.currentMP = this.enemy.maxMP;
-    this.messageQueue.pull(Messages.encounterEnemy([this.enemy]));
-    execMethod(this.event.onFindEnemy, null, [[this.enemy]]);
+    this.messageQueue.clear();
+    this.genEnemies();
+    this.messageQueue.pull(Messages.encounterEnemy(this.enemies));
+    execMethod(this.event.onFindEnemy, null, [this.enemies]);
     this.fightStart();
+  }
+
+  // 生成敌人
+  private genEnemies() {
+    this.enemies = [];
+    let total = 1;
+
+    // 10%概率遇到3个敌人
+    let probability = Math.random();
+    if (.1 >= probability) {
+      total = 3;
+    } else if (1 >= probability) {
+      total = 2;
+    }
+
+    // 30%概率遇到2个敌人
+    // 100%概率遇到1个敌人
+    while (--total >= 0) {
+      let enemy = this.gameMap.generateEnemy();
+      enemy.currentHP = enemy.maxHP;
+      enemy.currentMP = enemy.maxMP;
+      this.enemies.push(enemy);
+    }
   }
 
   // 结算
   private liquidation() {
     this.messageQueue.pull(Messages.text('正在结算...'));
-    let enemies = [this.enemy];
-    let exp = players.addExp(enemies);
+    let exp = players.addExp(this.enemies);
     this.messageQueue.pull(Messages.liquidation(`经验+${exp}`));
 
-    let gameProps: GameProp[] = GamePropManager.gatherGameProp(enemies, this.gameMap);
+    let gameProps: GameProp[] = GamePropManager.gatherGameProp(this.enemies, this.gameMap);
     this.player.bag.pull(gameProps);
     gameProps.forEach(prop => this.messageQueue.pull(Messages.gatherGameProp(prop)))
 
+    execMethod(this.event.onLiquidation, null, [true]);
   }
 
   // 普通防御
   normalDefense() {
     execMethod(this.event.onRoundStart, this);
     execMethod(this.event.onManual, null, [false]);
-
-    this.doNormalDefense(this.enemy, this.player);
+    eachA(
+      this.enemies.filter(GameRole.isLife),
+      enemy => this.doNormalDefense(enemy, this.player)
+    );
     this.fightOver();
   }
 
@@ -277,7 +310,7 @@ export class FightScene {
 
     // 逃跑失败受到1.5倍伤害
     else {
-      this.doEscapeFailure(this.enemy, this.player);
+      eachA(this.enemies, enemy => this.doEscapeFailure(enemy, this.player));
       this.roundOver();
     }
   }
@@ -314,18 +347,41 @@ export class FightScene {
 
     let skill = this.player.skillStore.shortcut[key];
     skill.use(this);
-    eachA(this.getEnemies(), e => this.doNormalAttack(e, this.player));
+    this.enemiesAttack();
     this.fightOver();
+  }
+
+  // 敌人进攻
+  private enemiesAttack() {
+    eachA(
+      this.enemies.filter(GameRole.isLife),
+      e => this.doNormalAttack(e, this.player)
+    );
   }
 
   // 获取所有敌人
   getEnemies() {
-    return [this.enemy];
+    return this.enemies;
   }
 
   // 获取角色防御值
   getDefense(role: GameRole): number {
-    return rand(role.defenseMin, role.defenseMax + 1);
+    let extraDefenseMax = 0;
+
+    let expiredSkills: Array<Skill> = [];
+    for (const sk of this.buffSkills.keys()) {
+      extraDefenseMax += (sk.extra.defenseMax || 0);
+      let keep = this.buffSkills.get(sk) - 1;
+      if (0 > keep)
+        expiredSkills.push(sk);
+      this.buffSkills.set(sk, keep);
+    }
+    eachA(expiredSkills, sk => {
+      this.onMessage(Messages.text(`${sk.name} Buff消失.`));
+      this.buffSkills.delete(sk);
+    });
+
+    return rand(role.defenseMin, role.defenseMax + 1) + extraDefenseMax;
   }
 
   // 收到消息
@@ -334,7 +390,7 @@ export class FightScene {
   }
 
   // 增加Buff
-  addBuff(skill: Skill) {
-    this.buffSkills.push(skill);
+  addBuff(skill: Skill, keep: number) {
+    this.buffSkills.set(skill, keep);
   }
 }

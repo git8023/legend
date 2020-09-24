@@ -33,22 +33,22 @@
             </div>
           </div>
           <div class="buf">
-            <img *ngFor="let skill of fightScene.buffSkills" [src]="skill.pic" alt="">
+            <img *ngFor="let skill of getBufSkills()" [src]="skill.pic" alt="">
           </div>
         </div>
       </div>
 
       <!--敌对方-->
       <div class="enemies absolute">
-        <div class="player" *ngIf="enemy">
+        <div class="player" *ngFor="let enemy of enemies">
           <div class="flex-h flex-center">
             <div class="flex-1 right-box">
               <div class="name">
-                {{enemy.name}} <span class="lv">Lv.{{enemy.level}}</span>
-
+                <div [class.color-red]="enemy.isBoss" [class.color-gray]="0==enemy.currentHP">{{enemy.name}} <span class="lv">Lv.{{enemy.level}}</span></div>
                 <div *ngFor="let data of enemyHarmInfo" class="deduct-box">
                   <div [durationDelete]="{cacheLength:0, extraClass:'anim', displayDuration:1000, data:data, cacheKey:durationDeleteKeys.playerHarm}"
                        [onDeleted]="deleteDeduct"
+                       *ngIf="data.role == enemy"
                        class="absolute deduct">
                     -{{data.harm}}
                   </div>
@@ -63,10 +63,12 @@
             </div>
             <img [src]="enemy.pic" alt="" class="head_pic">
           </div>
-          <div class="buf">
-            <img src="/assets/img/fight/stateIco/up_attack.jpg" alt="">
-            <img src="/assets/img/fight/stateIco/buf_2.png" alt="">
-          </div>
+          <!--<div class="buf">-->
+          <!--  <img src="/assets/img/fight/stateIco/up_attack.jpg" alt="">-->
+          <!--  <img src="/assets/img/fight/stateIco/buf_2.png" alt="">-->
+          <!--</div>-->
+
+          <div class="skill_wait" [skill-wait]="0==enemy.currentHP"></div>
         </div>
       </div>
 
@@ -119,8 +121,8 @@
             </div>
           </div>
           <div>
-            <div class="attack box" (click)="normalAttack()">
-              AUTO
+            <div class="attack box flex-h flex-center color-white color-green" (click)="swapAutoAttack()">
+              <img src="/assets/img/fight/skill/auto_attack.png" alt="">
             </div>
             <div class="prop-list flex-h">
               <div class="prop box flex-1">
