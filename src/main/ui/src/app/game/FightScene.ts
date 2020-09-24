@@ -237,18 +237,22 @@ export class FightScene {
   // 生成敌人
   private genEnemies() {
     this.enemies = [];
-    let total = 1;
 
     // 10%概率遇到3个敌人
+    let total;
     let probability = Math.random();
-    if (.1 >= probability) {
+    if (0.1 >= probability) {
       total = 3;
-    } else if (1 >= probability) {
+    }
+    // 30%概率遇到2个敌人
+    else if (0.3 >= probability) {
       total = 2;
     }
-
-    // 30%概率遇到2个敌人
     // 100%概率遇到1个敌人
+    else {
+      total = 1;
+    }
+
     while (--total >= 0) {
       let enemy = this.gameMap.generateEnemy();
       enemy.currentHP = enemy.maxHP;
