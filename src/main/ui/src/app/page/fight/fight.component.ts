@@ -37,10 +37,13 @@ export class FightComponent implements OnInit {
   };
 
   // 自动攻击(挂机)
-  private isAuto: boolean = false;
+  isAuto: boolean = false;
 
   // 下回合强制自动攻击
   private nextRoundAuto: boolean = false;
+
+  // 正在受伤的角色
+  hurtingRole: GameRole;
 
   constructor(private route: ActivatedRoute) {
   }
@@ -54,12 +57,11 @@ export class FightComponent implements OnInit {
     this.fightScene.fightEvent({
       // onStart: () => this.isPause = false,
       // onRoundStart: () => this.isPause = false,
-      // onRoundOver: () => {
-      //   if (this.nextRoundAuto) {
-      //     this.nextRoundAuto = false;
-      //     this.autoHandle();
-      //   }
-      // },
+      onRoundOver: () => {
+        setTimeout(() => {
+          this.hurtingRole = null;
+        }, 500);
+      },
       // onRejuvenation: () => this.isPause = (this.player.maxHP != this.player.currentHP),
       onLiquidation: (isDone) => {
         // if (isDone && this.nextRoundAuto) {
@@ -74,10 +76,9 @@ export class FightComponent implements OnInit {
           this.autoHandle();
       },
       onHurt: (role, harm) => {
-        if (role.isPlayer)
-          this.playerHarmInfo.push({harm});
-        else
-          this.enemyHarmInfo.push({harm, role});
+        if (role.isPlayer) this.playerHarmInfo.push({harm});
+        else this.enemyHarmInfo.push({harm, role});
+        this.hurtingRole = role;
       }
     });
     this.player = this.fightScene.player;
@@ -128,7 +129,7 @@ export class FightComponent implements OnInit {
   // 自动攻击(挂机)
   swapAutoAttack() {
     this.isAuto = !this.isAuto;
-    this.nextRoundAuto = true;
+    this.nextRoundAuto = this.isAuto;
   }
 
   // 挂机

@@ -1,6 +1,7 @@
 import {isArray, isDate, isFunction, isNullOrUndefined, isNumber, isObject, isString} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ElementRef} from '@angular/core';
+import {of} from 'rxjs';
 
 //<editor-fold desc="Define">
 //<editor-fold desc="Other">
@@ -372,6 +373,22 @@ export function extendPropsA<T, P>(a: Array<T>, k: string): Array<P> {
  */
 export function randA<T>(a: Array<T>): T {
   return a[rand(0, a.length)];
+}
+
+/**
+ * 随机弹出部分元素以保存指定长度
+ * @param a 数组
+ * @param maxLen 最大长度
+ */
+export function randKeepLength<T>(a: T[], maxLen: number): T[] {
+  while (true) {
+    if (maxLen < a.length) {
+      let index = rand(0, a.length);
+      a.splice(index, 1);
+    } else {
+      return a;
+    }
+  }
 }
 
 //</editor-fold>

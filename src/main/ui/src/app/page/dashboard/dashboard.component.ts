@@ -15,13 +15,12 @@ class GameNavOption {
 export class DashboardComponent implements OnInit {
 
   gameNavs: GameNavOption[] = [
-    {id: 'PLAYER', text: '人物', link: '/player'},
     {id: 'PACKAGE', text: '背包', link: '/package'},
-    {id: 'EQUIPMENT', text: '装备', link: '/equipment'},
+    {id: 'EQUIPMENT', text: '人物属性', link: '/equipment'},
     {id: 'SKILLS', text: '技能', link: '/skills'},
     {id: 'MAP', text: '地图', link: '/map'},
     {id: 'FIGHT', text: '战斗', link: '/fight'},
-    {id: 'DUNGEON', text: '副本', link: '/dungeon'},
+    // {id: 'DUNGEON', text: '副本', link: '/dungeon'},
   ]
   gameNav: GameNavOption;
 

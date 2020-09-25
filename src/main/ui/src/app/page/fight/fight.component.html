@@ -9,7 +9,7 @@
 
       <!--我方-->
       <div class="players absolute">
-        <div class="player">
+        <div class="player" [class.hurting]="hurtingRole == player">
           <div class="flex-h flex-center">
             <img [src]="player.pic" alt="" class="head_pic">
             <div class="flex-1 right-box">
@@ -40,7 +40,7 @@
 
       <!--敌对方-->
       <div class="enemies absolute">
-        <div class="player" *ngFor="let enemy of enemies">
+        <div class="player" *ngFor="let enemy of enemies" [class.hurting]="hurtingRole == enemy">
           <div class="flex-h flex-center">
             <div class="flex-1 right-box">
               <div class="name">
@@ -121,7 +121,9 @@
             </div>
           </div>
           <div>
-            <div class="attack box flex-h flex-center color-white color-green" (click)="swapAutoAttack()">
+            <div class="auto-attack attack box flex-h flex-center color-white color-green"
+                 [class.auto]="isAuto"
+                 (click)="swapAutoAttack()">
               <img src="/assets/img/fight/skill/auto_attack.png" alt="">
             </div>
             <div class="prop-list flex-h">

@@ -397,4 +397,14 @@ export class FightScene {
   addBuff(skill: Skill, keep: number) {
     this.buffSkills.set(skill, keep);
   }
+
+  // 获取基础攻击值
+  getAttack(role: GameRole): number {
+    return rand(role.attackMin, role.attackMax);
+  }
+
+  // 获取活着的敌人
+  getLifeEnemies(): MasterRole[] {
+    return this.enemies.filter(MasterRole.isLife);
+  }
 }

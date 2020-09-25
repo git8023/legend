@@ -14,10 +14,10 @@
     <div class="gold absolute">999,999,999</div>
     <div class="score absolute">999,999,999</div>
 
-    <div class="absolute attribute-diff" *ngIf="replaceUpdateInfo.length">
+    <div class="absolute attribute-diff" *ngIf="!!replaceUpdateInfo.length">
       <div class="text-left">
         <ng-container *ngFor="let rui of replaceUpdateInfo">
-          <div *ngIf="0!=0<rui.value"
+          <div *ngIf="0<rui.value"
                class="{{0<rui.value?'up':'down'}}"
                [durationDelete]="{cacheLength:0}">
             {{rui.name}} <span class="val">{{rui.value}}</span>
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div *ngIf="currentProp" class="detail-box">
+  <div *ngIf="!!currentProp" class="detail-box">
     <div class="top">
       <div class="flex-h text-left">
         <img [src]="currentProp.pic" alt="">
@@ -39,23 +39,23 @@
     </div>
 
     <div>
-      <div class="prop" *ngIf="currentProp.attackMax">
+      <div class="prop" *ngIf="!!currentProp.attackMax">
         <div>攻&emsp;击:</div>
         <div class="val">
           {{currentProp.attackMin}} ~ {{currentProp.attackMax}}
         </div>
       </div>
-      <div class="prop" *ngIf="currentProp.hp">
+      <div class="prop" *ngIf="!!currentProp.hp">
         <span>生命值:</span>
         <span class="val">{{currentProp.hp}}</span>
       </div>
-      <div class="prop" *ngIf="currentProp.defenseMax">
+      <div class="prop" *ngIf="!!currentProp.defenseMax">
         <div>防&emsp;御:</div>
         <div class="val">
           {{currentProp.defenseMin}} ~ {{currentProp.defenseMax}}
         </div>
       </div>
-      <div class="prop" *ngIf="currentProp.speed">
+      <div class="prop" *ngIf="!!currentProp.speed">
         <div>速&emsp;度:</div>
         <div class="val">
           {{currentProp.speed}}

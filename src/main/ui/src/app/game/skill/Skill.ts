@@ -1,8 +1,9 @@
 // 技能
-import {eachO, randA} from '../../common/utils';
+import {eachA, eachO, randA, randKeepLength} from '../../common/utils';
 import {Player} from '../role/Player';
 import {FightScene} from '../FightScene';
 import {Messages} from '../Message';
+import {MasterRole} from '../role/MasterRole';
 
 export interface Skill {
 
@@ -56,7 +57,7 @@ export class SkillStore {
 
   // 初始化
   constructor(private player: Player) {
-    this.points = 0;
+    this.points = 1;
     this.add({
       name: '二连刺',
       lv: 2,
@@ -100,12 +101,13 @@ export class SkillStore {
           fs.onMessage(Messages.text(`${player.name} 魔法值不足, 技能 [${this.name}] 发动失败!`))
           return;
         }
+        player.currentMP -= this.mp;
 
         // 随机选中单个敌人
         let master = randA(fs.getEnemies());
 
         // 首段攻击
-        let attack = Math.ceil((this.extra.attackAddtion / 100) * player.attackMax + player.attackMax);
+        let attack = fs.getAttack(player);
         let defense = fs.getDefense(master);
         let harm = attack - defense;
         fs.onHurt(player, master, Math.max(0, harm));
@@ -113,8 +115,6 @@ export class SkillStore {
         // 二段攻击
         attack = Math.ceil(attack / 2);
         fs.onHurt(player, master, Math.max(0, attack - defense));
-
-        player.currentMP -= this.mp;
       }
     });
     this.add({
@@ -129,8 +129,8 @@ export class SkillStore {
       get noteHtml() {
         return `伟大的<span class="color-green">肯尼迪大魔法师</span>赐予霜冻结界覆盖全身铠甲, 极大提高铠甲防御.
                   <div>
-                    <div>Buff <span class="color-red">${this.extra.keep}回合</span></div>
-                    <div>护甲 <span class="color-red"> +${this.extra.defenseMax}</span></div>
+                    <div><span class="color-green">Buff</span>: <span class="color-red">${this.extra.keep}</span>回合</div>
+                    <div><span class="color-green">护甲</span>: <span class="color-red">+${this.extra.defenseMax}</span></div>
                   </div>`
       },
       upgrade() {
@@ -139,6 +139,12 @@ export class SkillStore {
         this.upTimes++;
       },
       use(fs) {
+        if (this.mp > player.currentMP) {
+          fs.onMessage(Messages.text(`${player.name} 魔法值不足, 技能 [${this.name}] 发动失败!`))
+          return;
+        }
+        player.currentMP -= this.mp;
+
         fs.addBuff(this, this.extra.keep);
         fs.onMessage(Messages.text(`${player.name} 使用技能 [${this.name}]:
                                     护甲+${this.extra.defenseMax}, 持续${this.extra.keep}回合`));
@@ -152,11 +158,14 @@ export class SkillStore {
       upTimes: 0,
       maxUpTimes: 10,
       pic: '/assets/img/fight/skill/shan_dian_lian.bmp',
-      extra: {damping: 20},
+      extra: {damping: 10, times: 3},
       get noteHtml() {
         return `发射出一道猛烈的闪电，并在附近的敌人身上不停的跳跃．
                 每次跳跃衰减<span class="color-red">${this.extra.damping}%</span>的攻击力.
-                <div>跳跃次数: <span class="color-red">3</span></div>`;
+                <div>
+                    <div><span class="color-green">跳跃次数</span>: <span class="color-red">${this.extra.times}</span></div>
+                    <div><span class="color-green">基础伤害</span>: 玩家等级<span class="color-red"> * 1.5</span></div>
+                </div>`;
       },
       upgrade() {
         if (0 == this.upTimes) {
@@ -167,7 +176,22 @@ export class SkillStore {
         this.upTimes++;
       },
       use(fs) {
+        if (this.mp > player.currentMP) {
+          fs.onMessage(Messages.text(`${player.name} 魔法值不足, 技能 [${this.name}] 发动失败!`))
+          return;
+        }
+        player.currentMP -= this.mp;
 
+        fs.onMessage(Messages.text(`[${player.name}]使用技能[${this.name}]:`));
+        let enemies: MasterRole[] = fs.getLifeEnemies();
+        randKeepLength(enemies, this.extra.times);
+        let attack = fs.getAttack(player) + Math.ceil(player.level * 1.5);
+        eachA(enemies, (enemy) => {
+          let defense = fs.getDefense(enemy);
+          let harm = attack - defense;
+          fs.onHurt(player, enemy, Math.max(0, harm));
+          attack -= Math.ceil(attack * 0.2);
+        });
       }
     });
     // 按学习技能排序
