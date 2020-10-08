@@ -1,7 +1,8 @@
 <div class="main flex-h flex-center">
 
   <div class="relative font-size-0">
-    <img [src]="'/assets/img/fight/bg/'+gameMap.name+'.jpg'" alt="" class="relative position-origin">
+<!--    <img [src]="'/assets/img/fight/bg/'+gameMap.name+'.jpg'" alt="" class="relative position-origin">-->
+    <img [src]="'/assets/img/fight/bg/XING_ZI_LIN.jpg'" alt="" class="relative position-origin">
     <div class="absolute full-parent position-origin mask"></div>
 
     <!--主面板-->
@@ -40,7 +41,7 @@
 
       <!--敌对方-->
       <div class="enemies absolute">
-        <div class="player" *ngFor="let enemy of enemies" [class.hurting]="hurtingRole == enemy">
+        <div class="player enemy" *ngFor="let enemy of enemies" [class.hurting]="hurtingRole == enemy">
           <div class="flex-h flex-center">
             <div class="flex-1 right-box">
               <div class="name">
@@ -178,9 +179,9 @@
             遇到敌人 <span class="enemy" *ngFor="let enemy of msg.data.extra">{{enemy.name}}*1</span> 准备战斗.
           </span>
           <span *ngIf="5 == msg.type">
-            获得 <span class="enemy">{{msg.data.gameProp.name}}*1</span>.
+            获得 <span class="color-green">{{msg.data.gameProp.name}}</span>.
           </span>
-          <span *ngIf="msg.data.extra">{{showExtra(msg.data.extra)}}</span>
+          <span *ngIf="msg.data.extra" [innerHTML]="showExtra(msg.data.extra)"></span>
         </div>
       </div>
 

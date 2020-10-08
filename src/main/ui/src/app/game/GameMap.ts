@@ -2,7 +2,7 @@ import {MasterRole} from './role/MasterRole';
 import {randA} from '../common/utils';
 import {EquipmentStore, EquipmentType} from './gameProp/Equipment';
 
-export interface GameMap {
+export class GameMap {
   // ID
   id: number;
 
@@ -35,9 +35,21 @@ export interface GameMap {
 
   // 道具总爆率(n%)/
   probability?: number
+
+  private static local: GameMap;
+
+  public static getLocal() {
+    if (!this.local)
+      this.local = GameMaps.XING_ZI_LIN;
+    return this.local;
+  }
+
+  static setLocal(map: GameMap) {
+    this.local = map;
+  }
 }
 
-let xingZiLin: GameMap = {
+let MAP_OF_XING_ZI_LIN: GameMap = {
   id: 0,
   name: 'XING_ZI_LIN',
   cnName: '杏子林',
@@ -59,7 +71,7 @@ let xingZiLin: GameMap = {
     MasterRole.of({
       name: '野猪',
       pic: '/assets/img/fight/master/wild_pig.png',
-      level: 1,
+      level: 2,
       maxHP: 12,
       maxMP: 5,
       speed: 1,
@@ -68,10 +80,92 @@ let xingZiLin: GameMap = {
       defenseMin: 0,
       defenseMax: 2,
     }),
+    // MasterRole.of({
+    //   name: '小陆龟',
+    //   pic: '/assets/img/fight/master/tortoise.png',
+    //   level: 2,
+    //   maxHP: 15,
+    //   maxMP: 1,
+    //   speed: 0,
+    //   attackMin: 0,
+    //   attackMax: 3,
+    //   defenseMin: 0,
+    //   defenseMax: 3
+    // }),
+    // MasterRole.of({
+    //   name: '小树妖',
+    //   pic: '/assets/img/fight/master/dryad.png',
+    //   level: 2,
+    //   maxHP: 17,
+    //   maxMP: 1,
+    //   speed: 2,
+    //   attackMin: 1,
+    //   attackMax: 2,
+    //   defenseMin: 1,
+    //   defenseMax: 2
+    // }),
+    // MasterRole.ofBoss({
+    //   name: '野猪王',
+    //   pic: '/assets/img/fight/master/wild_pig_king.png',
+    //   level: 5,
+    //   maxHP: 35,
+    //   maxMP: 10,
+    //   speed: 5,
+    //   attackMin: 1,
+    //   attackMax: 5,
+    //   defenseMin: 1,
+    //   defenseMax: 3
+    // }),
+  ],
+  equipments: EquipmentStore.genByRange(0, 9),
+  bossRate: 10 / 100,
+  probability: 0.25,
+  generateEnemy: function () {
+    while (true) {
+      let master = randA<MasterRole>(this.enemies);
+      if (!master.isBoss)
+        return MasterRole.of(master);
+
+      if (Math.random() <= this.bossRate)
+        return MasterRole.ofBoss(master);
+    }
+  }
+};
+let MAP_OF_BA_LI_ZHUANG: GameMap = {
+  id: 0,
+  name: 'BA_LI_ZHUANG',
+  cnName: '八里庄',
+  pointCenter: {x: 372, y: 230},
+  levelRange: {min: 5, max: 15},
+  enemies: [
+    // MasterRole.of({
+    //   name: '毒蜘蛛',
+    //   pic: '/assets/img/fight/master/du_zhi_zhu.png',
+    //   level: 1,
+    //   maxHP: 10,
+    //   maxMP: 5,
+    //   speed: 3,
+    //   attackMin: 0,
+    //   attackMax: 1,
+    //   defenseMin: 0,
+    //   defenseMax: 1,
+    // }),
+    // MasterRole.of({
+    //   name: '野猪',
+    //   pic: '/assets/img/fight/master/wild_pig.png',
+    //   level: 1,
+    //   maxHP: 12,
+    //   maxMP: 5,
+    //   speed: 1,
+    //   attackMin: 0,
+    //   attackMax: 2,
+    //   defenseMin: 0,
+    //   defenseMax: 2,
+    // }),
     MasterRole.of({
       name: '小陆龟',
       pic: '/assets/img/fight/master/tortoise.png',
-      level: 2,
+      level: 5,
       maxHP: 15,
       maxMP: 1,
       speed: 0,
@@ -83,7 +177,7 @@ let xingZiLin: GameMap = {
     MasterRole.of({
       name: '小树妖',
       pic: '/assets/img/fight/master/dryad.png',
-      level: 2,
+      level: 10,
       maxHP: 17,
       maxMP: 1,
       speed: 2,
@@ -92,31 +186,20 @@ let xingZiLin: GameMap = {
       defenseMin: 1,
       defenseMax: 2
     }),
-    MasterRole.ofBoss({
-      name: '野猪王',
-      pic: '/assets/img/fight/master/wild_pig_king.png',
-      level: 5,
-      maxHP: 35,
-      maxMP: 10,
-      speed: 5,
-      attackMin: 1,
-      attackMax: 5,
-      defenseMin: 1,
-      defenseMax: 3
-    }),
+    // MasterRole.ofBoss({
+    //   name: '野猪王',
+    //   pic: '/assets/img/fight/master/wild_pig_king.png',
+    //   level: 5,
+    //   maxHP: 35,
+    //   maxMP: 10,
+    //   speed: 5,
+    //   attackMin: 1,
+    //   attackMax: 5,
+    //   defenseMin: 1,
+    //   defenseMax: 3
+    // }),
   ],
-  equipments: EquipmentStore.create([
-    {
-      name: '绯红铠甲',
-      pic: '/assets/img/equip/armour/02_01.png',
-      note: '绯红宝石镶嵌的铠甲, 有着不菲防御',
-      lv: 2,
-      probability: 0.05,
-      defenseMin: 1,
-      defenseMax: 2,
-      type: EquipmentType.ARMOUR
-    }
-  ]),
+  equipments: EquipmentStore.genByRange(5, 15),
   bossRate: 10 / 100,
   probability: 0.25,
   generateEnemy: function () {
@@ -182,13 +265,7 @@ const GameMaps = {
     pointCenter: {x: 505, y: 270},
     levelRange: {min: 30, max: 50}
   },
-  BA_LI_ZHUANG: <GameMap>{
-    id: 0,
-    name: 'BA_LI_ZHUANG',
-    cnName: '八里庄',
-    pointCenter: {x: 372, y: 230},
-    levelRange: {min: 5, max: 15}
-  },
+  BA_LI_ZHUANG: MAP_OF_BA_LI_ZHUANG,
   SHI_BA_LI_PU: <GameMap>{
     id: 0,
     name: 'SHI_BA_LI_PU',
@@ -196,7 +273,7 @@ const GameMaps = {
     pointCenter: {x: 440, y: 450},
     levelRange: {min: 10, max: 20}
   },
-  XING_ZI_LIN: xingZiLin,
+  XING_ZI_LIN: MAP_OF_XING_ZI_LIN,
   QI_XIA_ZHEN: <GameMap>{
     id: 0,
     name: 'QI_XIA_ZHEN',
@@ -232,6 +309,8 @@ const GameMaps = {
     pointCenter: {x: 80, y: 620},
     levelRange: {min: 50, max: 80}
   },
+
+
 };
 
 export {GameMaps};

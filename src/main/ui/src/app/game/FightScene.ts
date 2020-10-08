@@ -117,7 +117,7 @@ export class FightScene {
       this.messageQueue.pull(Messages.dead(toRole));
   }
 
-  // 收到伤害
+  // 受到伤害
   onHurt(fromRole: GameRole, toRole: GameRole, harm: number) {
     toRole.currentHP = Math.max(toRole.currentHP - harm, 0);
 
@@ -268,8 +268,12 @@ export class FightScene {
     this.messageQueue.pull(Messages.liquidation(`经验+${exp}`));
 
     let gameProps: GameProp[] = GamePropManager.gatherGameProp(this.enemies, this.gameMap);
-    this.player.bag.pull(gameProps);
-    gameProps.forEach(prop => this.messageQueue.pull(Messages.gatherGameProp(prop)))
+    let pushCount = this.player.bag.pull(gameProps);
+    let missProps = gameProps.splice(pushCount);
+    gameProps.forEach(prop => this.messageQueue.pull(Messages.gatherGameProp(prop)));
+    if (missProps.length > 0) {
+      missProps.forEach(prop => this.messageQueue.pull(Messages.text(`遗失的道具 <span class="color-green">${prop.name}</span>`)));
+    }
 
     execMethod(this.event.onLiquidation, null, [true]);
   }
@@ -406,5 +410,12 @@ export class FightScene {
   // 获取活着的敌人
   getLifeEnemies(): MasterRole[] {
     return this.enemies.filter(MasterRole.isLife);
+  }
+
+  // 同步场景数据
+  sync() {
+    execMethod(this.event.onFindEnemy, null, [this.enemies]);
+    // TODO 本次战斗结束后切换地图
+    // 如果直接切换地图可能造成低等级区域敌人爆出高等级地图装备
   }
 }

@@ -14,7 +14,7 @@ export class PackageComponent implements OnInit {
 
   bag: Bag = players.getCurrent().bag;
   currentProp: Equipment;
-  replaceUpdateInfo: Array<{ name: string, value: number }> = [];
+  replaceUpdateInfo: Array<{ name?: string, value?: number, message?: string }> = [];
   clearReplaceUpdateInfo = () => {
     this.replaceUpdateInfo.length = 0;
   };
@@ -42,7 +42,14 @@ export class PackageComponent implements OnInit {
 
   // 换装
   replaceEquipment(prop: Equipment, index: number) {
+    this.replaceUpdateInfo.length = 0;
     let player = players.getCurrent();
+
+    // TODO 检查装备要求
+    if (!player.equipments.checkReplace(prop)) {
+      this.replaceUpdateInfo.push({message: `需要等级: ${prop.lv}`});
+      return;
+    }
 
     // 记录换装前数据
     let before = {};
@@ -56,6 +63,7 @@ export class PackageComponent implements OnInit {
     // 换装后数据
     let after = {};
     eachO<number>(before, (v, k) => after[k] = player[k]);
+
     // 差异
     this.replaceUpdateInfo.length = 0;
     eachO<number>(after, (v, k) => {
@@ -64,6 +72,10 @@ export class PackageComponent implements OnInit {
         value: v - (before[k] || 0)
       });
     });
-    console.log(before, after, this.replaceUpdateInfo);
   }
+
+  // // 删除消息
+  // onDeleted = (index: number) => {
+  //   this.replaceUpdateInfo.splice(index, 1);
+  // }
 }

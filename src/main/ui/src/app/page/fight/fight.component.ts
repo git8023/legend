@@ -15,6 +15,8 @@ import {MasterRole} from '../../game/role/MasterRole';
   styleUrls: ['./fight.component.scss']
 })
 export class FightComponent implements OnInit {
+  static fightSceneInstance: FightScene = null;
+
   gameMap: GameMap;
   player: Player;
   enemies: MasterRole[] = [];
@@ -53,7 +55,13 @@ export class FightComponent implements OnInit {
     this.gameMap = GameMaps[mapKey] || GameMaps.XING_ZI_LIN;
 
     // 创建游戏场景
-    this.fightScene = new FightScene(this.gameMap);
+    let isFirst = (null == FightComponent.fightSceneInstance);
+    if (isFirst) {
+      FightComponent.fightSceneInstance = this.fightScene = new FightScene(GameMap.getLocal());
+    } else {
+      this.fightScene = FightComponent.fightSceneInstance;
+    }
+
     this.fightScene.fightEvent({
       // onStart: () => this.isPause = false,
       // onRoundStart: () => this.isPause = false,
@@ -82,7 +90,13 @@ export class FightComponent implements OnInit {
       }
     });
     this.player = this.fightScene.player;
-    this.fightScene.countdownNextEnemies();
+
+    if (isFirst) {
+      this.fightScene.countdownNextEnemies();
+    } else {
+      this.fightScene.sync();
+    }
+
   }
 
   // 普通攻击(敌人/队友)
@@ -130,6 +144,10 @@ export class FightComponent implements OnInit {
   swapAutoAttack() {
     this.isAuto = !this.isAuto;
     this.nextRoundAuto = this.isAuto;
+
+    if (!this.isPause) {
+      this.normalAttack();
+    }
   }
 
   // 挂机

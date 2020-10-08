@@ -156,6 +156,11 @@ export class PlayerEquipments {
   constructor(private player: Player) {
   }
 
+  // 检查是否符合装备要求
+  checkReplace(eq: Equipment): boolean {
+    return eq.lv <= this.player.level;
+  }
+
   // 换装
   replace(newly: Equipment): Equipment {
 

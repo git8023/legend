@@ -19,9 +19,10 @@
         <ng-container *ngFor="let rui of replaceUpdateInfo">
           <div *ngIf="0<rui.value"
                class="{{0<rui.value?'up':'down'}}"
-               [durationDelete]="{cacheLength:0}">
+               [durationDelete]="{cacheLength:0, cacheKey:'BAG'}">
             {{rui.name}} <span class="val">{{rui.value}}</span>
           </div>
+          <span class="color-red">{{rui.message}}</span>
         </ng-container>
       </div>
     </div>

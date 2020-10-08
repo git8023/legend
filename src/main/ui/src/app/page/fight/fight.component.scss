@@ -33,12 +33,12 @@
       }
     }
 
-    .player {
-      &.hurting {
-        left: auto;
-        right: -.5rem;
-      }
-    }
+    //.player {
+    //  &.hurting {
+    //    //left: auto;
+    //    //right: -.5rem;
+    //  }
+    //}
   }
 
   .player {
@@ -331,7 +331,6 @@
 }
 
 .hurting {
-  left: -.5rem;
-  right: auto;
-  transition: right .3s, left .3s;
+  background: rgba(255, 0, 0, .2) !important;
+  transition: background-color .3s;
 }

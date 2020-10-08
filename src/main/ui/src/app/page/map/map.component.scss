@@ -9,6 +9,7 @@
       left: 0;
       width: 2rem;
       z-index: 1;
+      transition: left 1s, top 1s;
 
       > img {
         width: 100%;

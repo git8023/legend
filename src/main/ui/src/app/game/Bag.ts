@@ -81,11 +81,27 @@ export class Bag {
     //     type: EquipmentType.BELT
     //   }),
     // );
+    // let i = 36 - this.props.length;
+    // while (--i >= 0) {
+    //   this.props.push(Equipment.of(this.props[0]));
+    // }
+
   }
 
-  // 游戏道具加入背包
+  /**
+   * 游戏道具加入背包
+   * @param gameProps 道具列表
+   * @returns 成功加入背包的道具数量, 从0~N
+   */
   pull(gameProps: GameProp[]) {
+    // 背包不允许超出最大数量: 36
+    const MAX_COUNT = 36;
+    let pushLen = MAX_COUNT - this.props.length;
     concatA(this.props, gameProps);
+    while (this.props.length > MAX_COUNT) {
+      this.props.pop();
+    }
+    return Math.min(pushLen, gameProps.length);
   }
 
   // 道具替换

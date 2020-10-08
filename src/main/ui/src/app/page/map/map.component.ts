@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 })
 export class MapComponent implements OnInit {
   mapLocalPointer = {left: '0px', top: '0px'};
-  mapLocal: GameMap = GameMaps.XING_ZI_LIN;
+  mapLocal: GameMap = GameMap.getLocal();
 
   constructor(
     private router: Router
@@ -26,10 +26,12 @@ export class MapComponent implements OnInit {
    * @param key
    */
   moveTo($event: MouseEvent, key: string) {
-    this.mapLocal = GameMaps[key];
+    if (this.mapLocal == GameMaps[key])
+      this.router.navigate(['/fight', {mapKey: key}]).finally();
+
+    GameMap.setLocal(this.mapLocal = GameMaps[key]);
     this.mapLocalPointer.left = this.mapLocal.pointCenter.x + 'px';
     this.mapLocalPointer.top = this.mapLocal.pointCenter.y + 'px';
-    this.router.navigate(['/fight', {mapKey: key}]).finally();
   }
 
   /**
