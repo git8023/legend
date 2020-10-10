@@ -1,7 +1,7 @@
 <div class="main flex-h flex-center">
 
   <div class="relative font-size-0">
-<!--    <img [src]="'/assets/img/fight/bg/'+gameMap.name+'.jpg'" alt="" class="relative position-origin">-->
+    <!--    <img [src]="'/assets/img/fight/bg/'+gameMap.name+'.jpg'" alt="" class="relative position-origin">-->
     <img [src]="'/assets/img/fight/bg/XING_ZI_LIN.jpg'" alt="" class="relative position-origin">
     <div class="absolute full-parent position-origin mask"></div>
 
@@ -76,6 +76,7 @@
       <!--回合信息-->
       <div class="round_info absolute">
         <div class="round_times">第 {{fightScene.roundCounter}} 回合</div>
+        <div *ngIf="isAuto" class="color-green text-center">自动攻击中...</div>
       </div>
 
       <!--聊天频道-->

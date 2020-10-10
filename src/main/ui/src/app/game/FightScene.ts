@@ -60,6 +60,10 @@ export class FightScene {
   roundCounter: number = 1;
   // Buff列表
   buffSkills: Map<Skill, number> = new Map<Skill, number>();
+  // 本次结算后切换地图场景
+  // true-本次战斗结束后切换地图
+  // false-不用切换地图
+  waitSwapMap: boolean = false;
 
   constructor(private gameMap: GameMap) {
     this.player = players.getCurrent();
@@ -276,6 +280,12 @@ export class FightScene {
     }
 
     execMethod(this.event.onLiquidation, null, [true]);
+
+    // 切换地图
+    if (this.waitSwapMap) {
+      this.waitSwapMap = false;
+      this.gameMap = GameMap.getLocal();
+    }
   }
 
   // 普通防御
@@ -415,7 +425,9 @@ export class FightScene {
   // 同步场景数据
   sync() {
     execMethod(this.event.onFindEnemy, null, [this.enemies]);
-    // TODO 本次战斗结束后切换地图
+
+    // 本次战斗结束后切换地图
     // 如果直接切换地图可能造成低等级区域敌人爆出高等级地图装备
+    this.waitSwapMap = true;
   }
 }

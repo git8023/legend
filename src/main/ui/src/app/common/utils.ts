@@ -1,6 +1,7 @@
 import {isArray, isDate, isFunction, isNullOrUndefined, isNumber, isObject, isString} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ElementRef} from '@angular/core';
+import {isNotNullOrUndefined} from 'codelyzer/util/isNotNullOrUndefined';
 
 //<editor-fold desc="Define">
 //<editor-fold desc="Other">
@@ -125,17 +126,30 @@ export function guid(): string {
 
 /**
  * 从from递增到to, 并将生成的数据追加到列表中
- * @param from 开始位置
  * @param to 结束位置(不包含)
- * @param step 步长
+ * @param [from=0] 开始位置
+ * @param [step=1] 步长
  * @param generator 数据生成器
  * @returns 生成的数据列表
  */
 export function forEachMap<T>(generator: () => T, to: number, from: number = 0, step: number = 1): T[] {
   let ret: T[] = [];
-  for (; from < to; from += step)
-    ret.push(generator())
+  for (; from < to; from += step) {
+    let item = generator();
+    if (isNotNullOrUndefined(item))
+      ret.push(item)
+  }
   return ret;
+}
+
+/**
+ * 判断值v是否在min到max之间
+ * @param v 目标值
+ * @param min 低边界
+ * @param max 高边界
+ */
+export function inRange(v: number, min: number, max: number): boolean {
+  return min <= v && v <= max;
 }
 
 //</editor-fold>

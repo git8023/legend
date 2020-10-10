@@ -52,7 +52,8 @@ export class FightComponent implements OnInit {
 
   ngOnInit() {
     let mapKey = this.route.snapshot.params.mapKey;
-    this.gameMap = GameMaps[mapKey] || GameMaps.XING_ZI_LIN;
+    this.gameMap = GameMaps[mapKey] || GameMap.getLocal() || GameMaps.XING_ZI_LIN;
+    GameMap.setLocal(this.gameMap);
 
     // 创建游戏场景
     let isFirst = (null == FightComponent.fightSceneInstance);

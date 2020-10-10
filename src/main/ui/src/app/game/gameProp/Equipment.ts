@@ -1,5 +1,5 @@
 import {GameProp} from './GameProp';
-import {concatA, copyProps, eachA, eachO, groupA, randA} from "../../common/utils";
+import {concatA, copyProps, eachA, eachO, groupA, inRange, randA} from "../../common/utils";
 
 // 装备
 export class Equipment extends GameProp {
@@ -77,7 +77,7 @@ export class EquipmentStore {
         probability: 0.01,
         defenseMin: 1,
         defenseMax: 2,
-        lv: 2,
+        lv: 3,
         type: EquipmentType.ARMOUR
       }),
       Equipment.of({
@@ -123,7 +123,7 @@ export class EquipmentStore {
         probability: 0.01,
         attackMin: 1,
         attackMax: 1,
-        lv: 5,
+        lv: 3,
         type: EquipmentType.RING
       }),
       Equipment.of({
@@ -148,7 +148,7 @@ export class EquipmentStore {
         speed: 1,
         defenseMin: 1,
         defenseMax: 2,
-        lv: 4,
+        lv: 3,
         type: EquipmentType.SHOE
       }),
       Equipment.of({
@@ -237,9 +237,14 @@ export class EquipmentStore {
     return es;
   }
 
-  // 随机获取装备
-  getRandom(): Equipment {
-    return Equipment.of(randA(this.localEquipments));
+  /**
+   * 随机获取一件在指定等级范围内的装备
+   * @param lvMin 最低等级
+   * @param lvMax 最高等级
+   */
+  getRandomByLevelRange(lvMin: number, lvMax: number): Equipment {
+    let props = this.localEquipments.filter(e => inRange(e.lv, lvMin, lvMax));
+    return (0 == props.length) ? null : Equipment.of(randA(props));
   }
 }
 
